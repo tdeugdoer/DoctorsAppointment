@@ -8,17 +8,14 @@ import com.tserashkevich.patientservice.dtos.PatientResponse;
 import java.util.UUID;
 
 public interface PatientService {
-    PatientResponse create(PatientRequest PatientRequest);
+    PatientResponse create(PatientRequest patientRequest);
 
-    PatientResponse update(UUID id, PatientRequest PatientRequest);
+    PatientResponse update(UUID id, PatientRequest patientRequest);
 
-    void delete(UUID PatientId);
+    void delete(UUID patientId);
 
     PageResponse<PatientResponse> findAll(FindAllParams findAllParams);
 
-    PatientResponse findById(UUID PatientId);
-
-    Boolean existById(UUID PatientId);
-
+    PatientResponse findById(UUID patientId);
     Boolean existByPhoneNumber(String phoneNumber);
 }

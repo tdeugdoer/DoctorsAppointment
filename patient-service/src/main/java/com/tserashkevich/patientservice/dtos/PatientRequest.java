@@ -20,7 +20,6 @@ public class PatientRequest {
     @Size(max = 15, message = ValidationList.WRONG_MAX_SURNAME_LENGTH)
     private final String surname;
 
-    @NotBlank(message = ValidationList.PATRONYMIC_REQUIRED)
     @Size(max = 15, message = ValidationList.WRONG_MAX_PATRONYMIC_LENGTH)
     private final String patronymic;
 
@@ -33,7 +32,7 @@ public class PatientRequest {
     @Pattern(regexp = PatternList.PHONE_PATTERN, message = ValidationList.WRONG_PHONE_FORMAT)
     private final String phoneNumber;
 
-    @NotNull(message = ValidationList.BIRTH_DATE_REQUIRED)
-    @Past(message = ValidationList.WRONG_BIRTH_DATE)
+    @NotNull(message = ValidationList.BIRTHDATE_REQUIRED)
+    @Past(message = ValidationList.WRONG_BIRTHDATE)
     private final LocalDate birthDate;
 }
