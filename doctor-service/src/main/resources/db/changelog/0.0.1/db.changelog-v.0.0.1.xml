@@ -3,14 +3,14 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="3" author="tdeugdoer">
+    <changeSet id="1" author="tdeugdoer">
         <sqlFile dbms="postgresql"
                  encoding="UTF-8"
                  endDelimiter=";"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="03-insert-doctors-table.sql"/>
+                 path="01-create-doctors-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="UTF-8"
@@ -18,7 +18,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="03-delete-doctors-table.sql"/>
+                     path="01-drop-doctors-table.sql"/>
         </rollback>
     </changeSet>
 

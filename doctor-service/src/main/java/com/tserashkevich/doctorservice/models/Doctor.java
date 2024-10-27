@@ -1,6 +1,7 @@
-package com.tserashkevich.patientservice.models;
+package com.tserashkevich.doctorservice.models;
 
-import com.tserashkevich.patientservice.models.enums.Gender;
+import com.tserashkevich.doctorservice.models.enums.Gender;
+import com.tserashkevich.doctorservice.models.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "patients")
-public class Patient {
+@Table(name = "doctors")
+public class Doctor {
     @Id
     @UuidGenerator
     private UUID id;
@@ -31,10 +32,18 @@ public class Patient {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private Specialization specialization;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
 
     @Column(unique = true, nullable = false, length = 12)
     private String phoneNumber;
 
+    @Column
+    private Integer experience;
+
+    @Column
     private LocalDate birthDate;
 }

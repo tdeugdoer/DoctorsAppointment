@@ -47,7 +47,6 @@ public class PatientServiceImpl implements PatientService {
         checkPhoneExists(patientRequest.getPhoneNumber(), patientId);
         Patient patient = getOrThrow(patientId);
         patientMapper.updateModel(patient, patientRequest);
-//        patientRepository.save(patient);
         log.info(LogList.EDIT_PATIENT, patientId);
         return patientMapper.toResponse(patient);
     }
