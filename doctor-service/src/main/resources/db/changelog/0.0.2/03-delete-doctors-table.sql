@@ -1,0 +1,4 @@
+DELETE
+FROM doctors
+WHERE id IN ('9e38169e-9305-441e-8003-8a377aa0a626', '586d191f-93f1-469b-8098-4e5901afd3e0',
+             'ca3f4512-e272-4389-8c2d-1e639e84ee39');
