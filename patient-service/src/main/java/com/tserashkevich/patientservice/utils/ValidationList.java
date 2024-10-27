@@ -13,7 +13,6 @@ public class ValidationList {
     public static final String WRONG_GENDER = "{wrong.gender}";
     public static final String PHONE_REQUIRED = "{phone.required}";
     public static final String WRONG_PHONE_FORMAT = "{wrong.phone.format}";
-    public static final String PHONE_NUMBER_ALREADY_EXIST = "{number.already.exists}";
     public static final String BIRTHDATE_REQUIRED = "{birthdate.required}";
     public static final String WRONG_BIRTHDATE = "{wrong.birthdate}";
 }

@@ -2,7 +2,6 @@ package com.tserashkevich.patientservice.dtos;
 
 import com.tserashkevich.patientservice.utils.PatternList;
 import com.tserashkevich.patientservice.utils.ValidationList;
-import com.tserashkevich.patientservice.validators.validAnnotations.ValidPatientPhoneNumber;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public class PatientRequest {
     @Pattern(regexp = PatternList.GENDER_PATTERN, message = ValidationList.WRONG_GENDER)
     private final String gender;
 
-    @ValidPatientPhoneNumber(message = ValidationList.PHONE_NUMBER_ALREADY_EXIST)
     @NotBlank(message = ValidationList.PHONE_REQUIRED)
     @Pattern(regexp = PatternList.PHONE_PATTERN, message = ValidationList.WRONG_PHONE_FORMAT)
     private final String phoneNumber;

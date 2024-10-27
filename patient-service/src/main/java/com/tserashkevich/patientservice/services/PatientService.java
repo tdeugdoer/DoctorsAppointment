@@ -5,6 +5,7 @@ import com.tserashkevich.patientservice.dtos.PageResponse;
 import com.tserashkevich.patientservice.dtos.PatientRequest;
 import com.tserashkevich.patientservice.dtos.PatientResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface PatientService {
@@ -17,5 +18,6 @@ public interface PatientService {
     PageResponse<PatientResponse> findAll(FindAllParams findAllParams);
 
     PatientResponse findById(UUID patientId);
-    Boolean existByPhoneNumber(String phoneNumber);
+
+    List<PatientResponse> search(String searchLine);
 }

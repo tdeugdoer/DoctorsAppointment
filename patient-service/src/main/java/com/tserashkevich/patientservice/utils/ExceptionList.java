@@ -10,7 +10,8 @@ import java.util.Locale;
 
 @AllArgsConstructor
 public enum ExceptionList {
-    PATIENT_NOT_FOUND("patient.not.found");
+    PATIENT_NOT_FOUND("patient.not.found"),
+    PHONE_NUMBER_ALREADY_EXIST("phone.number.already.exist");
 
     private static MessageSource messageSource;
 

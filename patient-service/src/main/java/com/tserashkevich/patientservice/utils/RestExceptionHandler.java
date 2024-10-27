@@ -4,6 +4,7 @@ import com.tserashkevich.patientservice.dtos.ExceptionResponse;
 import com.tserashkevich.patientservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.patientservice.dtos.Violation;
 import com.tserashkevich.patientservice.exceptions.PatientNotFoundException;
+import com.tserashkevich.patientservice.exceptions.PhoneAlreadyExistException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,14 @@ public class RestExceptionHandler {
         log.error(LogList.NOT_FOUND_ERROR, ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(PhoneAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> handlePhoneAlreadyExistException(RuntimeException ex) {
+        log.error(LogList.PHONE_ALREADY_EXIST_ERROR, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 

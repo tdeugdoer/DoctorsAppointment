@@ -6,6 +6,7 @@ import com.tserashkevich.patientservice.dtos.PageResponse;
 import com.tserashkevich.patientservice.dtos.PatientRequest;
 import com.tserashkevich.patientservice.dtos.PatientResponse;
 import com.tserashkevich.patientservice.exceptions.PatientNotFoundException;
+import com.tserashkevich.patientservice.exceptions.PhoneAlreadyExistException;
 import com.tserashkevich.patientservice.mappers.PatientMapper;
 import com.tserashkevich.patientservice.models.Patient;
 import com.tserashkevich.patientservice.models.QPatient;
@@ -34,6 +35,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponse create(PatientRequest patientRequest) {
+        checkPhoneExists(patientRequest.getPhoneNumber());
         Patient patient = patientMapper.toModel(patientRequest);
         patientRepository.save(patient);
         log.info(LogList.CREATE_PATIENT, patient.getId());
@@ -41,11 +43,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientResponse update(UUID id, PatientRequest patientRequest) {
-        Patient patient = getOrThrow(id);
+    public PatientResponse update(UUID patientId, PatientRequest patientRequest) {
+        checkPhoneExists(patientRequest.getPhoneNumber(), patientId);
+        Patient patient = getOrThrow(patientId);
         patientMapper.updateModel(patient, patientRequest);
 //        patientRepository.save(patient);
-        log.info(LogList.EDIT_PATIENT, id);
+        log.info(LogList.EDIT_PATIENT, patientId);
         return patientMapper.toResponse(patient);
     }
 
@@ -86,14 +89,24 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional(readOnly = true)
     @Override
-    public Boolean existByPhoneNumber(String phoneNumber) {
-        log.info(LogList.EXIST_PATIENT_BY_PHONE_NUMBER, phoneNumber);
-        return patientRepository.existsByPhoneNumber(phoneNumber);
-
+    public List<PatientResponse> search(String searchLine) {
+        return patientMapper.toResponses(patientRepository.search(searchLine));
     }
 
     public Patient getOrThrow(UUID patientId) {
         Optional<Patient> optionalPassenger = patientRepository.findById(patientId);
         return optionalPassenger.orElseThrow(PatientNotFoundException::new);
+    }
+
+    public void checkPhoneExists(String phoneNumber) {
+        Optional<Patient> patient = patientRepository.findByPhoneNumber(phoneNumber);
+        if (patient.isPresent())
+            throw new PhoneAlreadyExistException();
+    }
+
+    public void checkPhoneExists(String phoneNumber, UUID patientId) {
+        Optional<Patient> patient = patientRepository.findByPhoneNumber(phoneNumber);
+        if (patient.isPresent() && !patient.get().getId().equals(patientId))
+            throw new PhoneAlreadyExistException();
     }
 }
