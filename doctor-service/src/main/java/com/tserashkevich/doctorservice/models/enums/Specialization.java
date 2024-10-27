@@ -1,12 +1,12 @@
 package com.tserashkevich.doctorservice.models.enums;
 
 public enum Specialization {
-    THERAPY,
-    SURGERY,
-    PEDIATRICS,
-    NEUROLOGY,
-    DENTISTRY,
-    GYNECOLOGY,
-    DERMATOLOGICAL,
-    OTHER
+    Therapy,
+    Surgery,
+    Pediatrics,
+    Neurology,
+    Dentistry,
+    Gynecology,
+    Dermatological,
+    Other
 }
