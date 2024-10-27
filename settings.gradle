@@ -1,1 +1,3 @@
 rootProject.name = 'DoctorsAppointment'
+
+include 'patient-service'
