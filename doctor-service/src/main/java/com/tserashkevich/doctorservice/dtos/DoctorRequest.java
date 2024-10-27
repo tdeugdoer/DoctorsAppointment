@@ -33,7 +33,7 @@ public class DoctorRequest {
     @NotBlank(message = ValidationList.PHONE_REQUIRED)
     @Pattern(regexp = PatternList.PHONE_PATTERN, message = ValidationList.WRONG_PHONE_FORMAT)
     private final String phoneNumber;
-    
+
     @Min(value = 0, message = ValidationList.EXPERIENCE_LESS_ZERO)
     @Max(value = 100, message = ValidationList.EXPERIENCE_MORE_HUNDRED)
     private final Integer experience;

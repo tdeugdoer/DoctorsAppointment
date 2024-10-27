@@ -1,13 +1,10 @@
 package com.tserashkevich.doctorservice.services.impl;
 
 import com.querydsl.core.types.Predicate;
-import com.tserashkevich.doctorservice.mappers.DoctorMapper;
-import com.tserashkevich.doctorservice.repositories.DoctorRepository;
-import com.tserashkevich.doctorservice.services.DoctorService;
-import com.tserashkevich.doctorservice.dtos.FindAllParams;
-import com.tserashkevich.doctorservice.dtos.PageResponse;
 import com.tserashkevich.doctorservice.dtos.DoctorRequest;
 import com.tserashkevich.doctorservice.dtos.DoctorResponse;
+import com.tserashkevich.doctorservice.dtos.FindAllParams;
+import com.tserashkevich.doctorservice.dtos.PageResponse;
 import com.tserashkevich.doctorservice.exceptions.DoctorNotFoundException;
 import com.tserashkevich.doctorservice.exceptions.PhoneAlreadyExistException;
 import com.tserashkevich.doctorservice.mappers.DoctorMapper;
