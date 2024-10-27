@@ -3,6 +3,7 @@ package com.tserashkevich.patientservice.models;
 import com.tserashkevich.patientservice.models.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Table(name = "patients")
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
     private UUID id;
 
     @Column(nullable = false, length = 15)

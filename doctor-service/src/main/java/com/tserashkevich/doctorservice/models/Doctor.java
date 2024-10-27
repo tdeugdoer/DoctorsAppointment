@@ -4,6 +4,7 @@ import com.tserashkevich.doctorservice.models.enums.Gender;
 import com.tserashkevich.doctorservice.models.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Table(name = "doctors")
 public class Doctor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
     private UUID id;
 
     @Column(nullable = false, length = 15)

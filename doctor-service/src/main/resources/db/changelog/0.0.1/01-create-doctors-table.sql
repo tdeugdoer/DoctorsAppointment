@@ -1,6 +1,6 @@
 CREATE TABLE doctors
 (
-    id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id             UUID PRIMARY KEY,
     name           VARCHAR(15)        NOT NULL,
     surname        VARCHAR(15)        NOT NULL,
     patronymic     VARCHAR(15),
