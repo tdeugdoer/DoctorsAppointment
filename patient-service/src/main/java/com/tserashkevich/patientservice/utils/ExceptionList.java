@@ -11,7 +11,9 @@ import java.util.Locale;
 @AllArgsConstructor
 public enum ExceptionList {
     PATIENT_NOT_FOUND("patient.not.found"),
-    PHONE_NUMBER_ALREADY_EXIST("phone.number.already.exist");
+    PHONE_NUMBER_ALREADY_EXIST("phone.number.already.exist"),
+    IMAGE_PROCESSING_ERROR("image.processing.error"),
+    BAD_IMAGE("bad.image");
 
     private static MessageSource messageSource;
 

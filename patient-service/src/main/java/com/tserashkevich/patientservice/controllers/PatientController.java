@@ -12,8 +12,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,15 +28,18 @@ import java.util.UUID;
 public class PatientController {
     private final PatientService patientService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientResponse createPatient(@Valid @RequestBody PatientRequest patientRequest) {
-        return patientService.create(patientRequest);
+    public PatientResponse createPatient(@Valid @RequestPart PatientRequest patientRequest,
+                                         @RequestPart MultipartFile file) {
+        return patientService.create(patientRequest, file);
     }
 
-    @PutMapping("/{id}")
-    public PatientResponse updatePatient(@PathVariable UUID id, @Valid @RequestBody PatientRequest patientRequest) {
-        return patientService.update(id, patientRequest);
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public PatientResponse updatePatient(@PathVariable UUID id,
+                                         @Valid @RequestPart PatientRequest patientRequest,
+                                         @RequestPart MultipartFile file) {
+        return patientService.update(id, patientRequest, file);
     }
 
     @DeleteMapping("/{id}")

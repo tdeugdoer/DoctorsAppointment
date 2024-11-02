@@ -16,4 +16,5 @@ public class PatientResponse {
     private final String gender;
     private final String phoneNumber;
     private final LocalDate birthDate;
+    private final String image;
 }

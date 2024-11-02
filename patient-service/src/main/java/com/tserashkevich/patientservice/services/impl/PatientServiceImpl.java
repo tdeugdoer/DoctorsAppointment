@@ -11,6 +11,7 @@ import com.tserashkevich.patientservice.mappers.PatientMapper;
 import com.tserashkevich.patientservice.models.Patient;
 import com.tserashkevich.patientservice.models.QPatient;
 import com.tserashkevich.patientservice.repositories.PatientRepository;
+import com.tserashkevich.patientservice.services.ImageService;
 import com.tserashkevich.patientservice.services.PatientService;
 import com.tserashkevich.patientservice.utils.LogList;
 import com.tserashkevich.patientservice.utils.QPredicates;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,28 +34,40 @@ import java.util.UUID;
 public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
+    private final ImageService imageService;
 
     @Override
-    public PatientResponse create(PatientRequest patientRequest) {
+    public PatientResponse create(PatientRequest patientRequest, MultipartFile file) {
         checkPhoneExists(patientRequest.getPhoneNumber());
         Patient patient = patientMapper.toModel(patientRequest);
+
+        patient.setImage(imageService.upload(file));
         patientRepository.save(patient);
+
         log.info(LogList.CREATE_PATIENT, patient.getId());
         return patientMapper.toResponse(patient);
+
     }
 
     @Override
-    public PatientResponse update(UUID patientId, PatientRequest patientRequest) {
+    public PatientResponse update(UUID patientId, PatientRequest patientRequest, MultipartFile file) {
         checkPhoneExists(patientRequest.getPhoneNumber(), patientId);
         Patient patient = getOrThrow(patientId);
+
+        imageService.update(patient.getImage(), file);
         patientMapper.updateModel(patient, patientRequest);
+
         log.info(LogList.EDIT_PATIENT, patientId);
         return patientMapper.toResponse(patient);
     }
 
     @Override
     public void delete(UUID patientId) {
-        patientRepository.delete(getOrThrow(patientId));
+        Patient patient = getOrThrow(patientId);
+
+        patientRepository.delete(patient);
+        imageService.delete(patient.getImage());
+
         log.info(LogList.DELETE_PATIENT, patientId);
     }
 

@@ -37,4 +37,7 @@ public class Patient {
     private String phoneNumber;
 
     private LocalDate birthDate;
+
+    @Column(unique = true, length = 50)
+    private String image;
 }
