@@ -3,7 +3,9 @@ package com.tserashkevich.doctorservice.utils;
 import com.tserashkevich.doctorservice.dtos.ExceptionResponse;
 import com.tserashkevich.doctorservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.doctorservice.dtos.Violation;
+import com.tserashkevich.doctorservice.exceptions.BadImageException;
 import com.tserashkevich.doctorservice.exceptions.DoctorNotFoundException;
+import com.tserashkevich.doctorservice.exceptions.ImageProcessingException;
 import com.tserashkevich.doctorservice.exceptions.PhoneAlreadyExistException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,22 @@ public class RestExceptionHandler {
         log.error(LogList.PHONE_ALREADY_EXIST_ERROR, ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(BadImageException.class)
+    public ResponseEntity<ExceptionResponse> handleBadImageException(RuntimeException ex) {
+        log.error(LogList.BAD_IMAGE, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ImageProcessingException.class)
+    public ResponseEntity<ExceptionResponse> handleImageUploadException(RuntimeException ex) {
+        log.error(LogList.IMAGE_PROCESSING_ERROR, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 

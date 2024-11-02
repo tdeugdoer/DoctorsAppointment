@@ -46,4 +46,8 @@ public class Doctor {
 
     @Column
     private LocalDate birthDate;
+
+    @Column(unique = true, length = 50)
+    private String image;
+
 }

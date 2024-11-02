@@ -10,5 +10,6 @@ CREATE TABLE doctors
     gender         VARCHAR(5)         NOT NULL CHECK (gender IN ('Men', 'Women', 'Other')),
     phone_number   VARCHAR(13) UNIQUE NOT NULL,
     experience     INTEGER,
-    birth_date     DATE
+    birth_date     DATE,
+    image          VARCHAR(50) UNIQUE
 );

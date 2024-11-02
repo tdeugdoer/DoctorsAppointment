@@ -12,6 +12,7 @@ import com.tserashkevich.doctorservice.models.Doctor;
 import com.tserashkevich.doctorservice.models.QDoctor;
 import com.tserashkevich.doctorservice.repositories.DoctorRepository;
 import com.tserashkevich.doctorservice.services.DoctorService;
+import com.tserashkevich.doctorservice.services.ImageService;
 import com.tserashkevich.doctorservice.utils.LogList;
 import com.tserashkevich.doctorservice.utils.QPredicates;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,28 +34,39 @@ import java.util.UUID;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final DoctorMapper doctorMapper;
+    private final ImageService imageService;
 
     @Override
-    public DoctorResponse create(DoctorRequest doctorRequest) {
+    public DoctorResponse create(DoctorRequest doctorRequest, MultipartFile file) {
         checkPhoneExists(doctorRequest.getPhoneNumber());
         Doctor doctor = doctorMapper.toModel(doctorRequest);
+
+        doctor.setImage(imageService.upload(file));
         doctorRepository.save(doctor);
+
         log.info(LogList.CREATE_DOCTOR, doctor.getId());
         return doctorMapper.toResponse(doctor);
     }
 
     @Override
-    public DoctorResponse update(UUID doctorId, DoctorRequest doctorRequest) {
+    public DoctorResponse update(UUID doctorId, DoctorRequest doctorRequest, MultipartFile file) {
         checkPhoneExists(doctorRequest.getPhoneNumber(), doctorId);
         Doctor doctor = getOrThrow(doctorId);
+
+        imageService.update(doctor.getImage(), file);
         doctorMapper.updateModel(doctor, doctorRequest);
+
         log.info(LogList.EDIT_DOCTOR, doctorId);
         return doctorMapper.toResponse(doctor);
     }
 
     @Override
     public void delete(UUID doctorId) {
-        doctorRepository.delete(getOrThrow(doctorId));
+        Doctor doctor = getOrThrow(doctorId);
+
+        doctorRepository.delete(doctor);
+        imageService.delete(doctor.getImage());
+
         log.info(LogList.DELETE_DOCTOR, doctorId);
     }
 

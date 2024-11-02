@@ -18,4 +18,5 @@ public class DoctorResponse {
     private final String phoneNumber;
     private final Integer experience;
     private final LocalDate birthDate;
+    private final String image;
 }

@@ -13,4 +13,10 @@ public class LogList {
     public static final String DELETE_DOCTOR = "Doctor deleted with ID: {}";
     public static final String FIND_ALL_DOCTORS = "Found all doctors";
     public static final String FIND_DOCTOR = "Found doctors with ID: {}";
+    public static final String IMAGE_PROCESSING_ERROR = "Image processing error";
+    public static final String BAD_IMAGE = "Bad image";
+    public static final String UPLOAD_IMAGE = "Image uploaded with key: {}";
+    public static final String UPDATE_IMAGE = "Image updated with key: {}";
+    public static final String DELETE_IMAGE = "Image deleted with key: {}";
+    public static final String GET_IMAGE = "Image got with key: {}";
 }
