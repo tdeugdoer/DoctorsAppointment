@@ -19,4 +19,5 @@ public class LogList {
     public static final String UPDATE_IMAGE = "Image updated with key: {}";
     public static final String DELETE_IMAGE = "Image deleted with key: {}";
     public static final String GET_IMAGE = "Image got with key: {}";
+    public static final String SEARCH_DOCTOR = "Search with searchline: {}";
 }

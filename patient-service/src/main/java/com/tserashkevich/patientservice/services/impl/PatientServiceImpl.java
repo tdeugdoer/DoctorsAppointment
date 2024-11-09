@@ -103,6 +103,7 @@ public class PatientServiceImpl implements PatientService {
     @Transactional(readOnly = true)
     @Override
     public List<PatientResponse> search(String searchLine) {
+        log.info(LogList.SEARCH_PATIENT, searchLine);
         return patientMapper.toResponses(patientRepository.search(searchLine));
     }
 

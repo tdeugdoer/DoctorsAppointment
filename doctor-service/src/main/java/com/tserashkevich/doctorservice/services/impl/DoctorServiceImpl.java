@@ -106,6 +106,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional(readOnly = true)
     @Override
     public List<DoctorResponse> search(String searchLine) {
+        log.info(LogList.SEARCH_DOCTOR, searchLine);
         return doctorMapper.toResponses(doctorRepository.search(searchLine));
     }
 
