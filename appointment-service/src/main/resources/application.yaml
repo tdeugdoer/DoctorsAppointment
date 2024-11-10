@@ -1,0 +1,35 @@
+spring:
+  config:
+    import: optional:classpath:.env[.properties]
+  application:
+    name: appointment-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+resilience4j:
+  retry:
+    instances:
+      retry-conf:
+        max-attempts: 3
+        wait-duration: 1s
+  circuitbreaker:
+    instances:
+      circuitbreaker-conf:
+        sliding-window-type: count_based
+        sliding-window-size: 5
+        failure-rate-threshold: 75
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 20s
+        max-wait-duration-in-half-open-state: 5s
+        automatic-transition-from-open-to-half-open-enabled: true
+        permitted-number-of-calls-in-half-open-state: 2
+server:
+  port: ${SPRING_PORT}
