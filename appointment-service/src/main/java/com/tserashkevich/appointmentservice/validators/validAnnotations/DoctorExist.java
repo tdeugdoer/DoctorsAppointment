@@ -1,6 +1,6 @@
 package com.tserashkevich.appointmentservice.validators.validAnnotations;
 
-import com.tserashkevich.appointmentservice.validators.PatientExistValidator;
+import com.tserashkevich.appointmentservice.validators.DoctorExistValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -9,11 +9,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = {PatientExistValidator.class})
-@Target(ElementType.PARAMETER)
+@Constraint(validatedBy = {DoctorExistValidator.class})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PatientExist {
-    String message() default "Patient not exist";
+public @interface DoctorExist {
+    String message() default "Doctor not exist";
 
     Class<?>[] groups() default {};
 

@@ -107,6 +107,11 @@ public class PatientServiceImpl implements PatientService {
         return patientMapper.toResponses(patientRepository.search(searchLine));
     }
 
+    @Override
+    public Boolean exist(UUID patientId) {
+        return patientRepository.existsById(patientId);
+    }
+
     public Patient getOrThrow(UUID patientId) {
         Optional<Patient> optionalPassenger = patientRepository.findById(patientId);
         return optionalPassenger.orElseThrow(PatientNotFoundException::new);

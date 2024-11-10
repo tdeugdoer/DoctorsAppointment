@@ -82,7 +82,7 @@ public class AppointmentController {
                                                @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)
                                                @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
                                                @PathVariable String patientId) {
-        return appointmentService.book(appointmentId, patientId);
+        return appointmentService.book(appointmentId, UUID.fromString(patientId));
     }
 
     @PatchMapping("/complete/{appointmentId}")

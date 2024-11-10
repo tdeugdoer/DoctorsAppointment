@@ -110,6 +110,11 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorMapper.toResponses(doctorRepository.search(searchLine));
     }
 
+    @Override
+    public Boolean exist(UUID doctorId) {
+        return doctorRepository.existsById(doctorId);
+    }
+
     public Doctor getOrThrow(UUID doctorId) {
         Optional<Doctor> optionalPassenger = doctorRepository.findById(doctorId);
         return optionalPassenger.orElseThrow(DoctorNotFoundException::new);

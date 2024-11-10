@@ -75,4 +75,9 @@ public class PatientController {
     public List<PatientResponse> searchPatients(@PathVariable String searchLine) {
         return patientService.search(searchLine);
     }
+
+    @GetMapping("/exist/{patientId}")
+    public Boolean exitsPatient(@PathVariable UUID patientId) {
+        return patientService.exist(patientId);
+    }
 }

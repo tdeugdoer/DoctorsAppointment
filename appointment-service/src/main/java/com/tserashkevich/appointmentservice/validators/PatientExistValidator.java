@@ -1,5 +1,6 @@
 package com.tserashkevich.appointmentservice.validators;
 
+import com.tserashkevich.appointmentservice.feign.PatientFeignClient;
 import com.tserashkevich.appointmentservice.validators.validAnnotations.PatientExist;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
