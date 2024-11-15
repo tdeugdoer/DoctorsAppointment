@@ -1,0 +1,18 @@
+spring:
+  config:
+    import: optional:classpath:.env[.properties]
+  application:
+    name: catalog-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+server:
+  port: ${SPRING_PORT}
