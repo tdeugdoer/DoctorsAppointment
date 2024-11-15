@@ -5,7 +5,13 @@ import com.tserashkevich.appointmentservice.dtos.AppointmentResponse;
 import com.tserashkevich.appointmentservice.dtos.CreateAppointmentRequest;
 import com.tserashkevich.appointmentservice.dtos.FindAllParams;
 import com.tserashkevich.appointmentservice.dtos.PageResponse;
-import com.tserashkevich.appointmentservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.appointmentservice.dtos.feign.DoctorResponse;
+import com.tserashkevich.appointmentservice.dtos.feign.ServiceResponse;
+import com.tserashkevich.appointmentservice.exceptions.*;
+import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.appointmentservice.feign.DoctorFeignClient;
+import com.tserashkevich.appointmentservice.feign.PatientFeignClient;
+import com.tserashkevich.appointmentservice.feign.ServiceFeignClient;
 import com.tserashkevich.appointmentservice.mappers.AppointmentMapper;
 import com.tserashkevich.appointmentservice.models.Appointment;
 import com.tserashkevich.appointmentservice.models.QAppointment;
@@ -22,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,12 +39,20 @@ import java.util.UUID;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
+    private final ServiceFeignClient serviceFeignClient;
+    private final DoctorFeignClient doctorFeignClient;
+    private final PatientFeignClient patientFeignClient;
 
     @Override
     public AppointmentResponse create(CreateAppointmentRequest createAppointmentRequest) {
         Appointment appointment = appointmentMapper.toModel(createAppointmentRequest);
 
+        ServiceResponse serviceResponse = checkService(appointment.getService());
+        DoctorResponse doctorResponse = checkDoctor(appointment.getDoctor());
+        checkMatchingSpecialization(serviceResponse.getSpecialization(), doctorResponse.getSpecialization());
+
         appointment.setStatus(Status.FREE);
+        appointment.setPrice(countPrice(serviceResponse.getPrice(), doctorResponse.getExperience()));
         appointmentRepository.save(appointment);
 
         log.info(LogList.CREATE_APPOINTMENT, appointment.getId());
@@ -94,6 +109,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentResponse book(UUID appointmentId, UUID patientId) {
+        checkPatient(patientId);
         Appointment appointment = getOrThrow(appointmentId);
 
         appointment.setPatient(patientId);
@@ -115,8 +131,40 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentMapper.toResponse(appointment);
     }
 
-    public Appointment getOrThrow(UUID appointmentId) {
+    private Appointment getOrThrow(UUID appointmentId) {
         Optional<Appointment> optionalPassenger = appointmentRepository.findById(appointmentId);
         return optionalPassenger.orElseThrow(AppointmentNotFoundException::new);
+    }
+
+    private ServiceResponse checkService(UUID serviceId) {
+        try {
+            return serviceFeignClient.findService(serviceId);
+        } catch (OtherServiceNotFoundException e) {
+            throw new ServiceNotExistException();
+        }
+    }
+
+    private DoctorResponse checkDoctor(UUID doctorId) {
+        try {
+            return doctorFeignClient.findDoctor(doctorId);
+        } catch (OtherServiceNotFoundException e) {
+            throw new DoctorNotExistException();
+        }
+    }
+
+    private void checkMatchingSpecialization(String serviceSpecialization, String doctorSpecialization) {
+        if (!serviceSpecialization.equals(doctorSpecialization)) {
+            throw new DoctorNotMatchServiceException();
+        }
+    }
+
+    private void checkPatient(UUID patientId) {
+        if (!patientFeignClient.getExistPatient(patientId))
+            throw new PatientNotExistException();
+    }
+
+    private BigDecimal countPrice(BigDecimal price, Integer experience) {
+        BigDecimal coef = BigDecimal.valueOf(experience.doubleValue() / 100 + 1);
+        return price.multiply(coef);
     }
 }

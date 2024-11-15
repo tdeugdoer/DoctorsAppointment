@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LogList {
     public static final String NOT_FOUND_ERROR = "Not found exception thrown: {}";
+    public static final String NOT_MATCH_ERROR = "Not match exception: {}";
     public static final String METHOD_ARGUMENT_ERROR = "Not valid method argument exception thrown: {}";
     public static final String CONSTRAINT_VIOLATION_ERROR = "Failed parameter verification exception thrown: {}";
     public static final String BAD_REQUEST_OTHER_SERVICE = "Bad request, other service: {}";

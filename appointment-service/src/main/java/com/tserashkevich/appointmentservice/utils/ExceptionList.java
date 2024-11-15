@@ -13,7 +13,11 @@ public enum ExceptionList {
     APPOINTMENT_NOT_FOUND("appointment.not.found"),
     BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
     NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
-    SERVER_OTHER_SERVICE("server.other.service");
+    SERVER_OTHER_SERVICE("server.other.service"),
+    SERVICE_NOT_EXIST("service.not.exist"),
+    PATIENT_NOT_EXIST("patient.not.exist"),
+    DOCTOR_NOT_EXIST("doctor.not.exist"),
+    DOCTOR_NOT_MATCH_SERVICE_EXIST("doctor.not.match.service");
 
     private static MessageSource messageSource;
 

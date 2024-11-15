@@ -26,12 +26,18 @@ spring:
             url: http://localhost:8081/api/v1/doctors
             connect-timeout: 3000
             read-timeout: 5000
+          service:
+            url: http://localhost:8083/api/v1/services
+            connect-timeout: 3000
+            read-timeout: 5000
 resilience4j:
   retry:
     instances:
       retry-conf:
         max-attempts: 3
         wait-duration: 1s
+        ignore-exceptions:
+          - com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException
   circuitbreaker:
     instances:
       circuitbreaker-conf:
@@ -43,5 +49,7 @@ resilience4j:
         max-wait-duration-in-half-open-state: 5s
         automatic-transition-from-open-to-half-open-enabled: true
         permitted-number-of-calls-in-half-open-state: 2
+        ignore-exceptions:
+          - com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException
 server:
   port: ${SPRING_PORT}

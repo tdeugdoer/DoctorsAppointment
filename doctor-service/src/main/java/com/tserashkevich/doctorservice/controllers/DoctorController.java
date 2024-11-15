@@ -82,9 +82,4 @@ public class DoctorController {
     public List<DoctorResponse> searchDoctors(@PathVariable String searchLine) {
         return doctorService.search(searchLine);
     }
-
-    @GetMapping("/exist/{doctorId}")
-    public Boolean exitsDoctor(@PathVariable UUID doctorId) {
-        return doctorService.exist(doctorId);
-    }
 }

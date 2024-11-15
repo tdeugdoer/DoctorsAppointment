@@ -22,9 +22,11 @@ public class Appointment {
     private UUID id;
 
     @Column(nullable = false)
+    private UUID service;
+
+    @Column(nullable = false)
     private UUID doctor;
 
-    @Column
     private UUID patient;
 
     @Enumerated(EnumType.STRING)

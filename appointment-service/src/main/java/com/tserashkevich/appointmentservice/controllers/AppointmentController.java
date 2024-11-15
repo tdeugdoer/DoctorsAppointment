@@ -9,7 +9,6 @@ import com.tserashkevich.appointmentservice.services.AppointmentService;
 import com.tserashkevich.appointmentservice.utils.PatternList;
 import com.tserashkevich.appointmentservice.utils.SortList;
 import com.tserashkevich.appointmentservice.utils.ValidationList;
-import com.tserashkevich.appointmentservice.validators.validAnnotations.PatientExist;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -78,7 +77,6 @@ public class AppointmentController {
 
     @PatchMapping("/book/{appointmentId}/{patientId}")
     public AppointmentResponse bookAppointment(@PathVariable UUID appointmentId,
-                                               @PatientExist(message = ValidationList.PATIENT_NOT_EXIST)
                                                @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)
                                                @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
                                                @PathVariable String patientId) {

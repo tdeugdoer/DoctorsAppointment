@@ -3,7 +3,7 @@ package com.tserashkevich.appointmentservice.utils;
 import com.tserashkevich.appointmentservice.dtos.ExceptionResponse;
 import com.tserashkevich.appointmentservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.appointmentservice.dtos.Violation;
-import com.tserashkevich.appointmentservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.appointmentservice.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,11 +18,20 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class RestExceptionHandler {
-    @ExceptionHandler(AppointmentNotFoundException.class)
+    @ExceptionHandler({AppointmentNotFoundException.class, ServiceNotExistException.class,
+            DoctorNotExistException.class, PatientNotExistException.class})
     public ResponseEntity<ExceptionResponse> handleNotFoundException(RuntimeException ex) {
         log.error(LogList.NOT_FOUND_ERROR, ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(DoctorNotMatchServiceException.class)
+    public ResponseEntity<ExceptionResponse> handleDoctorNotMatchServiceException(RuntimeException ex) {
+        log.error(LogList.NOT_MATCH_ERROR, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 

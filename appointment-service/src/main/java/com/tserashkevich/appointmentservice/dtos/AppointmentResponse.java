@@ -11,6 +11,7 @@ import java.util.UUID;
 @Builder
 public class AppointmentResponse {
     private UUID id;
+    private UUID service;
     private UUID doctor;
     private UUID patient;
     private String status;
