@@ -6,6 +6,7 @@ import com.tserashkevich.catalogservice.models.Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface ServiceMapper {
     ServiceResponse toResponse(Service service);
 
     List<ServiceResponse> toResponses(List<Service> services);
+
+    @Mapping(target = "id", ignore = true)
+    void updateModel(@MappingTarget Service service, ServiceRequest serviceRequest);
+
 }
