@@ -30,6 +30,12 @@ spring:
             url: http://localhost:8083/api/v1/services
             connect-timeout: 3000
             read-timeout: 5000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka@localhost:8761/eureka/
+
 resilience4j:
   retry:
     instances:
@@ -51,5 +57,6 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         ignore-exceptions:
           - com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException
+
 server:
   port: ${SPRING_PORT}

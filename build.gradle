@@ -21,6 +21,7 @@ allprojects {
         springKafkaTest = '3.2.4'
         cucumberVersion = '7.20.1'
         minioVersion = '8.5.13'
+        eurekaVersion = '4.1.3'
     }
 
     repositories {
