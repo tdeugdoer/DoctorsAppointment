@@ -25,7 +25,7 @@ import java.util.UUID;
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/doctors")
+@RequestMapping(value = "/api/v1/doctors", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DoctorController {
     private final DoctorService doctorService;
 

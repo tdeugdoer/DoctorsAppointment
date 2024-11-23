@@ -1,0 +1,6 @@
+HOST=postgres
+POSTGRES_DATABASE=appointment_service
+POSTGRES_USERNAME=postgres
+POSTGRES_PASSWORD=postgres
+
+SPRING_PORT=8082

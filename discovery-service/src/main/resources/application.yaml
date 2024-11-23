@@ -1,9 +1,13 @@
 spring:
+  config:
+    import: optional:classpath:.env[.properties]
   application:
     name: discovery-service
+
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
 server:
-  port: 8761
+  port: ${SPRING_PORT}
