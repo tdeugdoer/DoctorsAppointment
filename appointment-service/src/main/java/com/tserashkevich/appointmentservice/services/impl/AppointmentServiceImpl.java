@@ -164,7 +164,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private BigDecimal countPrice(BigDecimal price, Integer experience) {
-        BigDecimal coef = BigDecimal.valueOf(experience.doubleValue() / 100 + 1);
-        return price.multiply(coef);
+        return experience == null
+                ? price
+                : BigDecimal.valueOf(experience.doubleValue() / 100 + 1);
     }
 }

@@ -1,17 +1,15 @@
 package com.tserashkevich.patientservice.services.impl;
 
+import com.tserashkevich.patientservice.configs.minio.MinioProperties;
 import com.tserashkevich.patientservice.exceptions.BadImageException;
 import com.tserashkevich.patientservice.exceptions.ImageProcessingException;
 import com.tserashkevich.patientservice.services.ImageService;
 import com.tserashkevich.patientservice.utils.LogList;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +21,7 @@ import java.util.UUID;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final MinioClient minioClient;
-    @Value("${minio.bucket}")
-    private String bucket;
+    private final MinioProperties minioProperties;
 
     @Override
     public String upload(MultipartFile file) {
@@ -35,7 +32,7 @@ public class ImageServiceImpl implements ImageService {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .stream(file.getInputStream(), file.getInputStream().available(), -1)
-                            .bucket(bucket)
+                            .bucket(minioProperties.getBucket())
                             .object(key)
                             .build()
             );
@@ -58,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .stream(file.getInputStream(), file.getInputStream().available(), -1)
-                            .bucket(bucket)
+                            .bucket(minioProperties.getBucket())
                             .object(key)
                             .build()
             );
@@ -73,7 +70,7 @@ public class ImageServiceImpl implements ImageService {
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
-                            .bucket(bucket)
+                            .bucket(minioProperties.getBucket())
                             .object(key)
                             .build()
             );
@@ -85,22 +82,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String get(String key) {
-        if (key != null) {
-            try {
-                String url = minioClient.getPresignedObjectUrl(
-                        GetPresignedObjectUrlArgs.builder()
-                                .method(Method.GET)
-                                .bucket(bucket)
-                                .object(key)
-                                .expiry(10000)
-                                .build()
-                );
-                log.info(LogList.GET_IMAGE, key);
-                return url;
-            } catch (Exception e) {
-                throw new ImageProcessingException();
-            }
-        } else return "";
+        return key != null
+                ? String.format("http://localhost:%d/%s/%s", minioProperties.getPort(),
+                minioProperties.getBucket(), key)
+                : "";
     }
 
     private void fileCheck(MultipartFile file) {

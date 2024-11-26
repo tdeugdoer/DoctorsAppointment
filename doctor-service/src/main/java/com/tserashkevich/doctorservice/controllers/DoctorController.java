@@ -25,6 +25,7 @@ import java.util.UUID;
 @RestController
 @Validated
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping(value = "/api/v1/doctors", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DoctorController {
     private final DoctorService doctorService;
