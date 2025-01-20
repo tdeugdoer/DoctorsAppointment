@@ -20,6 +20,7 @@ import com.tserashkevich.appointmentservice.repositories.AppointmentRepository;
 import com.tserashkevich.appointmentservice.services.AppointmentService;
 import com.tserashkevich.appointmentservice.utils.LogList;
 import com.tserashkevich.appointmentservice.utils.QPredicates;
+import com.tserashkevich.appointmentservice.utils.SortList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -129,6 +130,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         log.info(LogList.COMPLETE_APPOINTMENT, appointmentId);
         return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
+    public List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId) {
+        return appointmentMapper.toResponses(appointmentRepository.findByStatusAndDoctor(Status.FREE, doctorId, SortList.DATE_ASC.getValue()));
     }
 
     private Appointment getOrThrow(UUID appointmentId) {

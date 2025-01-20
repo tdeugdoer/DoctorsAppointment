@@ -5,11 +5,13 @@ import com.tserashkevich.doctorservice.utils.ValidationList;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Getter
 @Builder
+@ToString
 public class DoctorRequest {
     @NotBlank(message = ValidationList.NAME_REQUIRED)
     @Size(max = 15, message = ValidationList.WRONG_MAX_NAME_LENGTH)

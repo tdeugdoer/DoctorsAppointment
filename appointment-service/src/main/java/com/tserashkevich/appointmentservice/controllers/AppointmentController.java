@@ -67,6 +67,11 @@ public class AppointmentController {
         return appointmentService.findAll(findAllParams);
     }
 
+    @GetMapping("/free/{doctorId}")
+    public List<AppointmentResponse> findDoctorFreeAppointments(@PathVariable UUID doctorId) {
+        return appointmentService.findFreeWithDoctorId(doctorId);
+    }
+
     @GetMapping("/{appointmentId}")
     public AppointmentResponse findAppointmentById(@PathVariable UUID appointmentId) {
         return appointmentService.findById(appointmentId);

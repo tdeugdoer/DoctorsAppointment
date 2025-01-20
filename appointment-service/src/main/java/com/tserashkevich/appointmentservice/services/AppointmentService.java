@@ -22,4 +22,6 @@ public interface AppointmentService {
     AppointmentResponse book(UUID appointmentId, UUID patientId);
 
     AppointmentResponse complete(UUID appointmentId);
+
+    List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId);
 }

@@ -55,6 +55,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         imageService.update(doctor.getImage(), file);
         doctorMapper.updateModel(doctor, doctorRequest);
+        doctorRepository.save(doctor);
 
         log.info(LogList.EDIT_DOCTOR, doctorId);
         return doctorMapper.toResponse(doctor);
