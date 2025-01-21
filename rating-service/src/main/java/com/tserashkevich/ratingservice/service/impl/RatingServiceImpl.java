@@ -2,8 +2,10 @@ package com.tserashkevich.ratingservice.service.impl;
 
 import com.querydsl.core.types.Predicate;
 import com.tserashkevich.ratingservice.dtos.*;
+import com.tserashkevich.ratingservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
 import com.tserashkevich.ratingservice.exceptions.RatingExistException;
 import com.tserashkevich.ratingservice.exceptions.RatingNotFoundException;
+import com.tserashkevich.ratingservice.kafka.ChangeAvgDoctorRatingProducer;
 import com.tserashkevich.ratingservice.mappers.RatingMapper;
 import com.tserashkevich.ratingservice.models.QRating;
 import com.tserashkevich.ratingservice.models.Rating;
@@ -30,6 +32,7 @@ import java.util.UUID;
 public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
+    private final ChangeAvgDoctorRatingProducer changeAvgDoctorRatingProducer;
 
     @Override
     public RatingResponse create(RatingRequest ratingRequest) {
@@ -40,6 +43,9 @@ public class RatingServiceImpl implements RatingService {
 
         ratingRepository.save(rating);
         log.info(LogList.CREATE_RATING, rating.getId());
+
+        sendChangeAvgDoctorRating(rating.getDoctor());
+
         return ratingMapper.toRatingResponse(rating);
     }
 
@@ -51,13 +57,20 @@ public class RatingServiceImpl implements RatingService {
 
         ratingRepository.save(rating);
         log.info(LogList.EDIT_RATING, ratingId);
+
+        sendChangeAvgDoctorRating(rating.getDoctor());
+
         return ratingMapper.toRatingResponse(rating);
     }
 
     @Override
     public void delete(UUID ratingId) {
-        ratingRepository.delete(getOrThrow(ratingId));
+        Rating rating = getOrThrow(ratingId);
+
+        ratingRepository.delete(rating);
         log.info(LogList.DELETE_RATING, ratingId);
+
+        sendChangeAvgDoctorRating(rating.getDoctor());
     }
 
     @Transactional(readOnly = true)
@@ -97,7 +110,7 @@ public class RatingServiceImpl implements RatingService {
     public Double findDoctorAvgRating(UUID doctorId) {
         Double avgRating = ratingRepository.findAverageRatingByDoctor(doctorId);
         log.info(LogList.COUNT_AVG_RATING, doctorId);
-        return avgRating;
+        return Optional.ofNullable(avgRating).orElse(0.0);
     }
 
     @Override
@@ -112,8 +125,17 @@ public class RatingServiceImpl implements RatingService {
         return optionalRating.orElseThrow(RatingNotFoundException::new);
     }
 
-    public void checkRatingExist(Rating rating) {
+    private void checkRatingExist(Rating rating) {
         if (ratingRepository.existsByAppointment(rating.getAppointment()))
             throw new RatingExistException();
+    }
+
+    private void sendChangeAvgDoctorRating(UUID doctorId) {
+        changeAvgDoctorRatingProducer.sendChangeAvgDoctorRatingEvent(
+                ChangeAvgDoctorRatingEvent.builder()
+                        .doctor(doctorId)
+                        .avgRating(findDoctorAvgRating(doctorId))
+                        .build()
+        );
     }
 }

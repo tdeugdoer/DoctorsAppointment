@@ -14,6 +14,16 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: ChangeAvgDoctorRatingEvent:com.tserashkevich.ratingservice.dtos.kafka.ChangeAvgDoctorRatingEvent
+      change-avg-doctor-rating-topic:
+        name: change-avg-doctor-rating-topic
+      retries: 3
 
 eureka:
   client:
