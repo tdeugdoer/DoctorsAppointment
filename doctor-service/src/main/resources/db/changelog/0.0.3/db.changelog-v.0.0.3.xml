@@ -10,7 +10,7 @@
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="02-insert-doctors-table.sql"/>
+                 path="03-add-avg_rating-to-doctors-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="UTF-8"
@@ -18,7 +18,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="02-delete-doctors-table.sql"/>
+                     path="03-delete-avg_rating-from-doctors-table.sql"/>
         </rollback>
     </changeSet>
 

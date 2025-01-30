@@ -19,4 +19,10 @@
 
     <include file="0.0.2/db.changelog-v.0.0.2.xml" relativeToChangelogFile="true"/>
 
+    <changeSet id="3" author="tdeugdoer">
+        <tagDatabase tag="v.0.0.3"/>
+    </changeSet>
+
+    <include file="0.0.3/db.changelog-v.0.0.3.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

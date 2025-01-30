@@ -1,0 +1,2 @@
+ALTER TABLE doctors
+    ADD COLUMN avg_rating REAL DEFAULT 0.0;

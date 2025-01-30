@@ -51,4 +51,6 @@ public class Doctor {
     @Column(unique = true, length = 50)
     private String image;
 
+    @Column
+    private Double avgRating;
 }
