@@ -52,5 +52,5 @@ public class Doctor {
     private String image;
 
     @Column
-    private Double avgRating;
+    private Double rating;
 }

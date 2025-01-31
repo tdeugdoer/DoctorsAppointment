@@ -17,6 +17,7 @@ import java.util.List;
 public interface DoctorMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "image", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     Doctor toModel(DoctorRequest doctorRequest);
 
     @Mapping(target = "image", qualifiedByName = "getImageUrl", source = "image")
@@ -26,5 +27,6 @@ public interface DoctorMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "image", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     void updateModel(@MappingTarget Doctor doctor, DoctorRequest doctorRequest);
 }

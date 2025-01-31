@@ -19,4 +19,5 @@ public class DoctorResponse {
     private final Integer experience;
     private final LocalDate birthDate;
     private final String image;
+    private final Double rating;
 }

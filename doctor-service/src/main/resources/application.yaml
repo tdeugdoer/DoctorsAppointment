@@ -11,6 +11,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: group-1
+      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: ChangeAvgDoctorRatingEvent:com.tserashkevich.doctorservice.dtos.kafka.ChangeAvgDoctorRatingEvent
+      change-avg-doctor-rating-topic:
+        name: change-avg-doctor-rating-topic
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true

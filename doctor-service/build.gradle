@@ -17,6 +17,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${openfeignVersion}"
     implementation "io.minio:minio:${minioVersion}"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:${eurekaVersion}"
+    implementation 'org.springframework.kafka:spring-kafka'
 
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'org.postgresql:postgresql'

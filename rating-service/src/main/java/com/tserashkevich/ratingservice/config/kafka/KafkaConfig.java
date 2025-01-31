@@ -1,6 +1,7 @@
 package com.tserashkevich.ratingservice.config.kafka;
 
 import com.tserashkevich.ratingservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
@@ -16,15 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Configuration
 public class KafkaConfig {
 
     private final Environment environment;
-
-    public KafkaConfig(Environment environment) {
-        this.environment = environment;
-    }
-
 
     @Bean
     public ProducerFactory<String, ChangeAvgDoctorRatingEvent> producerFactory() {

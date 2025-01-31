@@ -5,6 +5,7 @@ import com.tserashkevich.doctorservice.dtos.DoctorRequest;
 import com.tserashkevich.doctorservice.dtos.DoctorResponse;
 import com.tserashkevich.doctorservice.dtos.FindAllParams;
 import com.tserashkevich.doctorservice.dtos.PageResponse;
+import com.tserashkevich.doctorservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
 import com.tserashkevich.doctorservice.exceptions.DoctorNotFoundException;
 import com.tserashkevich.doctorservice.exceptions.PhoneAlreadyExistException;
 import com.tserashkevich.doctorservice.mappers.DoctorMapper;
@@ -109,6 +110,13 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorResponse> search(String searchLine) {
         log.info(LogList.SEARCH_DOCTOR, searchLine);
         return doctorMapper.toResponses(doctorRepository.search(searchLine));
+    }
+
+    @Transactional
+    @Override
+    public void changeAvgRating(ChangeAvgDoctorRatingEvent changeAvgDoctorRatingEvent) {
+        Doctor doctor = getOrThrow(changeAvgDoctorRatingEvent.getDoctor());
+        doctor.setRating(changeAvgDoctorRatingEvent.getAvgRating());
     }
 
     public Doctor getOrThrow(UUID doctorId) {

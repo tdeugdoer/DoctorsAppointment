@@ -4,6 +4,7 @@ import com.tserashkevich.doctorservice.dtos.DoctorRequest;
 import com.tserashkevich.doctorservice.dtos.DoctorResponse;
 import com.tserashkevich.doctorservice.dtos.FindAllParams;
 import com.tserashkevich.doctorservice.dtos.PageResponse;
+import com.tserashkevich.doctorservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface DoctorService {
     DoctorResponse findById(UUID doctorId);
 
     List<DoctorResponse> search(String searchLine);
+
+    void changeAvgRating(ChangeAvgDoctorRatingEvent changeAvgDoctorRatingEvent);
 }
