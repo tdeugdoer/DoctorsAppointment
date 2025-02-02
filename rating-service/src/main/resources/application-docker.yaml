@@ -7,6 +7,14 @@ spring:
     password: ${POSTGRES_PASSWORD}
   kafka:
     bootstrap-servers: kafka:9092
+  cloud:
+    openfeign:
+      client:
+        config:
+          appointment:
+            url: http://appointment-service:8082/api/v1/appointments
+            connect-timeout: 3000
+            read-timeout: 5000
 
 eureka:
   client:

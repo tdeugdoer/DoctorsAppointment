@@ -17,4 +17,7 @@ public class LogList {
     public static final String RATING_EXIST = "User has already rated the ride";
     public static final String KAFKA_SEND_MESSAGE = "Kafka send message: {}";
     public static final String KAFKA_SEND_MESSAGE_FAIL = "Kafka send message fail: {} ({})";
+    public static final String BAD_REQUEST_OTHER_SERVICE = "Bad request, other service: {}";
+    public static final String NOT_FOUND_OTHER_SERVICE = "Not found, other service: {}";
+    public static final String SERVER_OTHER_SERVICE = "Server, other service: {}";
 }

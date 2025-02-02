@@ -2,9 +2,13 @@ package com.tserashkevich.ratingservice.service.impl;
 
 import com.querydsl.core.types.Predicate;
 import com.tserashkevich.ratingservice.dtos.*;
+import com.tserashkevich.ratingservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.ratingservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
+import com.tserashkevich.ratingservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.ratingservice.exceptions.RatingExistException;
 import com.tserashkevich.ratingservice.exceptions.RatingNotFoundException;
+import com.tserashkevich.ratingservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.ratingservice.feign.AppointmentFeignClient;
 import com.tserashkevich.ratingservice.kafka.ChangeAvgDoctorRatingProducer;
 import com.tserashkevich.ratingservice.mappers.RatingMapper;
 import com.tserashkevich.ratingservice.models.QRating;
@@ -33,12 +37,14 @@ public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
     private final ChangeAvgDoctorRatingProducer changeAvgDoctorRatingProducer;
+    private final AppointmentFeignClient appointmentFeignClient;
 
     @Override
     public RatingResponse create(RatingRequest ratingRequest) {
         Rating rating = ratingMapper.toModel(ratingRequest);
         checkRatingExist(rating);
 
+        ratingMapper.updateModel(rating, getAppointment(rating.getAppointment()));
         rating.setCreationTime(LocalDateTime.now());
 
         ratingRepository.save(rating);
@@ -137,5 +143,13 @@ public class RatingServiceImpl implements RatingService {
                         .avgRating(findDoctorAvgRating(doctorId))
                         .build()
         );
+    }
+
+    private AppointmentResponse getAppointment(UUID appointmentId) {
+        try {
+            return appointmentFeignClient.findAppointment(appointmentId);
+        } catch (OtherServiceNotFoundException e) {
+            throw new AppointmentNotFoundException();
+        }
     }
 }

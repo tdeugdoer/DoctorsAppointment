@@ -3,6 +3,7 @@ package com.tserashkevich.ratingservice.utils;
 import com.tserashkevich.ratingservice.dtos.ExceptionResponse;
 import com.tserashkevich.ratingservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.ratingservice.dtos.Violation;
+import com.tserashkevich.ratingservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.ratingservice.exceptions.RatingExistException;
 import com.tserashkevich.ratingservice.exceptions.RatingNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class RestExceptionHandler {
-    @ExceptionHandler(RatingNotFoundException.class)
+    @ExceptionHandler({RatingNotFoundException.class, AppointmentNotFoundException.class})
     public ResponseEntity<ExceptionResponse> handleNotFoundException(RuntimeException ex) {
         log.error(LogList.NOT_FOUND_ERROR, ex.getMessage());
         return ResponseEntity

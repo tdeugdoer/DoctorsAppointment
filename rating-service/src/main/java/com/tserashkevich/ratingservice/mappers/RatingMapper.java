@@ -4,6 +4,7 @@ import com.tserashkevich.ratingservice.dtos.Feedback;
 import com.tserashkevich.ratingservice.dtos.RatingRequest;
 import com.tserashkevich.ratingservice.dtos.RatingResponse;
 import com.tserashkevich.ratingservice.dtos.UpdateRatingRequest;
+import com.tserashkevich.ratingservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.ratingservice.models.Rating;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +15,11 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RatingMapper {
+
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "service", ignore = true)
+    @Mapping(target = "patient", ignore = true)
+    @Mapping(target = "doctor", ignore = true)
     @Mapping(target = "creationTime", ignore = true)
     Rating toModel(RatingRequest ratingRequest);
 
@@ -29,6 +34,12 @@ public interface RatingMapper {
     @Mapping(target = "appointment", ignore = true)
     @Mapping(target = "creationTime", ignore = true)
     void updateModel(@MappingTarget Rating rating, UpdateRatingRequest updateRatingRequest);
+
+    @Mapping(target = "appointment", ignore = true)
+    @Mapping(target = "rating", ignore = true)
+    @Mapping(target = "comment", ignore = true)
+    @Mapping(target = "creationTime", ignore = true)
+    void updateModel(@MappingTarget Rating rating, AppointmentResponse appointmentResponse);
 
     List<Feedback> toFeedbacks(List<Rating> ratings);
 }

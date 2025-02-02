@@ -11,7 +11,11 @@ import java.util.Locale;
 @AllArgsConstructor
 public enum ExceptionList {
     RATING_NOT_FOUND("rating.not.found"),
-    RATING_EXIST("rating.exist");
+    APPOINTMENT_NOT_FOUND("appointment.not.found"),
+    RATING_EXIST("rating.exist"),
+    BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
+    NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
+    SERVER_OTHER_SERVICE("server.other.service");
 
     private static MessageSource messageSource;
 
