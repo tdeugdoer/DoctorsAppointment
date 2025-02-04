@@ -11,8 +11,9 @@ import java.util.Locale;
 @AllArgsConstructor
 public enum ExceptionList {
     FEEDBACK_NOT_FOUND("feedback.not.found"),
-    APPOINTMENT_NOT_FOUND("appointment.not.found"),
     FEEDBACK_EXIST("feedback.exist"),
+    APPOINTMENT_NOT_FOUND("appointment.not.found"),
+    APPOINTMENT_NOT_COMPLETED("appointment.not.completed"),
     BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
     NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
     SERVER_OTHER_SERVICE("server.other.service");

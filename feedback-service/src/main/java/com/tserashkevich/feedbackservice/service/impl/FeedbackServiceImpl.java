@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.tserashkevich.feedbackservice.dtos.*;
 import com.tserashkevich.feedbackservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.feedbackservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
+import com.tserashkevich.feedbackservice.exceptions.AppointmentNotCompletedException;
 import com.tserashkevich.feedbackservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackExistException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackNotFoundException;
@@ -15,6 +16,7 @@ import com.tserashkevich.feedbackservice.models.Feedback;
 import com.tserashkevich.feedbackservice.models.QFeedback;
 import com.tserashkevich.feedbackservice.repositories.FeedbackRepository;
 import com.tserashkevich.feedbackservice.service.FeedbackService;
+import com.tserashkevich.feedbackservice.utils.AppointmentStatus;
 import com.tserashkevich.feedbackservice.utils.LogList;
 import com.tserashkevich.feedbackservice.utils.QPredicates;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedbackResponse create(FeedbackRequest feedbackRequest) {
         Feedback feedback = feedbackMapper.toModel(feedbackRequest);
         checkFeedbackExist(feedback);
+
+        AppointmentResponse appointmentResponse = getAppointment(feedback.getAppointment());
+        checkAppointmentIsCompleted(appointmentResponse);
 
         feedbackMapper.updateModel(feedback, getAppointment(feedback.getAppointment()));
         feedback.setCreationTime(LocalDateTime.now());
@@ -134,6 +139,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     private void checkFeedbackExist(Feedback feedback) {
         if (feedbackRepository.existsByAppointment(feedback.getAppointment()))
             throw new FeedbackExistException();
+    }
+
+    private void checkAppointmentIsCompleted(AppointmentResponse appointmentResponse) {
+        if (!appointmentResponse.getStatus().equals(AppointmentStatus.COMPLETED.name())) {
+            throw new AppointmentNotCompletedException();
+        }
     }
 
     private void sendChangeAvgDoctorFeedback(UUID doctorId) {

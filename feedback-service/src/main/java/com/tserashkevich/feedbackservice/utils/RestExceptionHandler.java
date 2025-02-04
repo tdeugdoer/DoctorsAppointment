@@ -3,6 +3,7 @@ package com.tserashkevich.feedbackservice.utils;
 import com.tserashkevich.feedbackservice.dtos.ExceptionResponse;
 import com.tserashkevich.feedbackservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.feedbackservice.dtos.Violation;
+import com.tserashkevich.feedbackservice.exceptions.AppointmentNotCompletedException;
 import com.tserashkevich.feedbackservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackExistException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackNotFoundException;
@@ -28,7 +29,7 @@ public class RestExceptionHandler {
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(FeedbackExistException.class)
+    @ExceptionHandler({FeedbackExistException.class, AppointmentNotCompletedException.class})
     public ResponseEntity<ExceptionResponse> handleFeedbackExistException(RuntimeException ex) {
         log.error(LogList.FEEDBACK_EXIST);
         return ResponseEntity
