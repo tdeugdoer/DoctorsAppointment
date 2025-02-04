@@ -82,6 +82,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String get(String key) {
+        log.info(LogList.GET_IMAGE, key);
         return key != null
                 ? String.format("http://localhost:%d/%s/%s", minioProperties.getPort(),
                 minioProperties.getBucket(), key)
