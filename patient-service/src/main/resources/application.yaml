@@ -19,13 +19,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka@localhost:8761/eureka/
-  instance:
-    prefer-ip-address: true
-
 minio:
   bucket: ${MINIO_BUCKET}
   host: ${MINIO_HOST}

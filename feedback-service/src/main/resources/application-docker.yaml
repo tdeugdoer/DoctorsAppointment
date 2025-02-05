@@ -16,10 +16,5 @@ spring:
             connect-timeout: 3000
             read-timeout: 5000
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka@discovery-service:8761/eureka/
-
 server:
   port: ${SPRING_PORT}
