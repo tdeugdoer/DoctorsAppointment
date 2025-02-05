@@ -1,10 +1,10 @@
-package com.tserashkevich.discoveryservice;
+package com.tserashkevich.medicalhistoryservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DiscoveryServiceApplicationTests {
+class MedicalHistoryServiceApplicationTests {
 
     @Test
     void contextLoads() {
