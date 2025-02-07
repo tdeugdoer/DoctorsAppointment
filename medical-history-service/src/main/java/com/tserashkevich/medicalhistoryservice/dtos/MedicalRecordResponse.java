@@ -9,8 +9,9 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class MedicalHistoryResponse {
+public class MedicalRecordResponse {
     private final UUID id;
+    private final UUID appointment;
     private final UUID patient;
     private final LocalDate dateOfVisit;
     private final UUID doctor;

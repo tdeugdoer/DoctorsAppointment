@@ -17,9 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(value = "medical_history")
-public class MedicalHistory {
+public class MedicalRecord {
     @Id
     private UUID id;
+    private UUID appointment;
     private UUID patient;
     private LocalDate dateOfVisit;
     private UUID doctor;
@@ -27,6 +28,6 @@ public class MedicalHistory {
     private List<String> treatments;
     private List<String> allergies;
     private List<String> recommendations;
-    private List<String> files;
+    private List<String> fileKeys;
     private String notes;
 }

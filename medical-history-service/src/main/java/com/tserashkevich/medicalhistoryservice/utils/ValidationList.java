@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ValidationList {
+    public final String APPOINTMENT_ID_REQUIRED = "{appointment.required}";
     public final String DOCTOR_ID_REQUIRED = "{doctor.required}";
     public final String PATIENT_ID_REQUIRED = "{patient.required}";
     public final String WRONG_UUID_FORMAT = "{wrong.uuid.format}";

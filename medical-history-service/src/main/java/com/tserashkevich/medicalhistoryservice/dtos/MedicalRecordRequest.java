@@ -15,23 +15,22 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class MedicalHistoryRequest {
+public class MedicalRecordRequest {
     @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)
     @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
     private final UUID patient;
-
     @NotNull(message = ValidationList.DATE_REQUIRED)
     @Past(message = ValidationList.WRONG_DATE)
     private final LocalDate dateOfVisit;
-
     @NotBlank(message = ValidationList.DOCTOR_ID_REQUIRED)
     @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
     private final UUID doctor;
-
     private final List<String> diagnosis;
     private final List<String> treatments;
     private final List<String> allergies;
     private final List<String> recommendations;
-    private final List<String> files;
     private final String notes;
+    @NotBlank(message = ValidationList.APPOINTMENT_ID_REQUIRED)
+    @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
+    private UUID appointment;
 }
