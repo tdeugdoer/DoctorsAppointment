@@ -19,12 +19,12 @@ import java.util.UUID;
 @Document(value = "medical_history")
 public class MedicalRecord {
     @Id
-    private UUID id;
-    private UUID appointment;
+    private String id;
     private UUID patient;
-    private LocalDate dateOfVisit;
+    private UUID appointment;
     private UUID doctor;
-    private List<String> diagnosis;
+    private LocalDate dateOfVisit;
+    private String diagnosis;
     private List<String> treatments;
     private List<String> allergies;
     private List<String> recommendations;

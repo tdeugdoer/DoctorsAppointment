@@ -41,7 +41,10 @@ public class PatientServiceImpl implements PatientService {
         checkPhoneExists(patientRequest.getPhoneNumber());
         Patient patient = patientMapper.toModel(patientRequest);
 
-        patient.setImage(imageService.upload(file));
+        if (file != null) {
+            patient.setImage(imageService.upload(file));
+        }
+
         patientRepository.save(patient);
 
         log.info(LogList.CREATE_PATIENT, patient.getId());
@@ -54,7 +57,10 @@ public class PatientServiceImpl implements PatientService {
         checkPhoneExists(patientRequest.getPhoneNumber(), patientId);
         Patient patient = getOrThrow(patientId);
 
-        imageService.update(patient.getImage(), file);
+        if (file != null) {
+            imageService.update(patient.getImage(), file);
+        }
+
         patientMapper.updateModel(patient, patientRequest);
 
         log.info(LogList.EDIT_PATIENT, patientId);

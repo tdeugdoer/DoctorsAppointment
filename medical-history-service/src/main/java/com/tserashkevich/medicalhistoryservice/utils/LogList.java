@@ -1,4 +1,4 @@
-package com.tserashkevich.medicalrecordservice.utils;
+package com.tserashkevich.medicalhistoryservice.utils;
 
 import lombok.experimental.UtilityClass;
 
@@ -12,6 +12,7 @@ public class LogList {
     public final String DELETE_MEDICAL_RECORD = "Medical record deleted with ID: {}";
     public final String FIND_ALL_MEDICAL_RECORDS = "Found all medical records";
     public final String FIND_MEDICAL_RECORD = "Found doctors with ID: {}";
+    public final String SEARCH_RECORDS = "Search with searchline: {}";
     public final String FILE_PROCESSING_ERROR = "File processing error";
     public final String BAD_FILE = "Bad file";
     public final String UPLOAD_FILE = "File uploaded with key: {}";

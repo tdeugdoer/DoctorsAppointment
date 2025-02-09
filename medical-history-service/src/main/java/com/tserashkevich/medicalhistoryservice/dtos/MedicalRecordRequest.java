@@ -11,26 +11,31 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
 public class MedicalRecordRequest {
     @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)
     @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
-    private final UUID patient;
+    private final String patient;
+
+    @NotBlank(message = ValidationList.APPOINTMENT_ID_REQUIRED)
+    @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
+    private final String appointment;
+
+    @NotBlank(message = ValidationList.DOCTOR_ID_REQUIRED)
+    @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
+    private final String doctor;
+
     @NotNull(message = ValidationList.DATE_REQUIRED)
     @Past(message = ValidationList.WRONG_DATE)
     private final LocalDate dateOfVisit;
-    @NotBlank(message = ValidationList.DOCTOR_ID_REQUIRED)
-    @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
-    private final UUID doctor;
-    private final List<String> diagnosis;
+
+    @NotBlank(message = ValidationList.DIAGNOSIS_REQUIRED)
+    private final String diagnosis;
+
     private final List<String> treatments;
     private final List<String> allergies;
     private final List<String> recommendations;
     private final String notes;
-    @NotBlank(message = ValidationList.APPOINTMENT_ID_REQUIRED)
-    @Pattern(regexp = PatternList.UUID_PATTERN, message = ValidationList.WRONG_UUID_FORMAT)
-    private UUID appointment;
 }

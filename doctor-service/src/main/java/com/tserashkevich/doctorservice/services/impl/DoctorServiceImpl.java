@@ -42,7 +42,9 @@ public class DoctorServiceImpl implements DoctorService {
         checkPhoneExists(doctorRequest.getPhoneNumber());
         Doctor doctor = doctorMapper.toModel(doctorRequest);
 
-        doctor.setImage(imageService.upload(file));
+        if (file != null) {
+            doctor.setImage(imageService.upload(file));
+        }
         doctorRepository.save(doctor);
 
         log.info(LogList.CREATE_DOCTOR, doctor.getId());
@@ -54,7 +56,10 @@ public class DoctorServiceImpl implements DoctorService {
         checkPhoneExists(doctorRequest.getPhoneNumber(), doctorId);
         Doctor doctor = getOrThrow(doctorId);
 
-        imageService.update(doctor.getImage(), file);
+        if (file != null) {
+            imageService.update(doctor.getImage(), file);
+        }
+
         doctorMapper.updateModel(doctor, doctorRequest);
         doctorRepository.save(doctor);
 
@@ -120,8 +125,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     public Doctor getOrThrow(UUID doctorId) {
-        Optional<Doctor> optionalPassenger = doctorRepository.findById(doctorId);
-        return optionalPassenger.orElseThrow(DoctorNotFoundException::new);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(doctorId);
+        return optionalDoctor.orElseThrow(DoctorNotFoundException::new);
     }
 
     public void checkPhoneExists(String phoneNumber) {

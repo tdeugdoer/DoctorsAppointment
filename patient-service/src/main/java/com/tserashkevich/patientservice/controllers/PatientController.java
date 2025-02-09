@@ -32,14 +32,14 @@ public class PatientController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PatientResponse createPatient(@Valid @RequestPart PatientRequest patientRequest,
-                                         @RequestPart MultipartFile file) {
+                                         @RequestPart(required = false) MultipartFile file) {
         return patientService.create(patientRequest, file);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PatientResponse updatePatient(@PathVariable UUID id,
                                          @Valid @RequestPart PatientRequest patientRequest,
-                                         @RequestPart MultipartFile file) {
+                                         @RequestPart(required = false) MultipartFile file) {
         return patientService.update(id, patientRequest, file);
     }
 
