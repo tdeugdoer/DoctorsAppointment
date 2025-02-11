@@ -5,9 +5,11 @@ import com.tserashkevich.medicalhistoryservice.exceptions.BadFileException;
 import com.tserashkevich.medicalhistoryservice.exceptions.FileProcessingException;
 import com.tserashkevich.medicalhistoryservice.services.FileService;
 import com.tserashkevich.medicalhistoryservice.utils.LogList;
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -96,11 +99,20 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String get(String key) {
-        log.info(LogList.GET_FILE, key);
-        return key != null
-                ? String.format("http://localhost:%d/%s/%s", minioProperties.getPort(),
-                minioProperties.getBucket(), key)
-                : "";
+        try {
+            log.info(LogList.GET_FILE, key);
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .bucket(minioProperties.getBucket())
+                            .method(Method.GET)
+                            .object(key)
+                            .expiry(10, TimeUnit.MINUTES)
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new FileProcessingException();
+        }
     }
 
     @Override

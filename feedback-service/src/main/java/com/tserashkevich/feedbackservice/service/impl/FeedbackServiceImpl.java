@@ -49,7 +49,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         AppointmentResponse appointmentResponse = getAppointment(feedback.getAppointment());
         checkAppointmentIsCompleted(appointmentResponse);
 
-        feedbackMapper.updateModel(feedback, getAppointment(feedback.getAppointment()));
+        feedbackMapper.updateModel(feedback, appointmentResponse);
         feedback.setCreationTime(LocalDateTime.now());
 
         feedbackRepository.save(feedback);

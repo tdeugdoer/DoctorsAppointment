@@ -4,7 +4,11 @@ import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
 import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
 import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
 import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.feign.AppointmentResponse;
+import com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordNotFoundException;
+import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.medicalhistoryservice.feign.AppointmentFeignClient;
 import com.tserashkevich.medicalhistoryservice.mappers.MedicalRecordMapper;
 import com.tserashkevich.medicalhistoryservice.models.MedicalRecord;
 import com.tserashkevich.medicalhistoryservice.repositories.MedicalRecordRepository;
@@ -27,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,11 +41,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     private final MongoTemplate mongoTemplate;
     private final MedicalRecordMapper medicalRecordMapper;
     private final FileService fileService;
+    private final AppointmentFeignClient appointmentFeignClient;
 
     @Override
     public MedicalRecordResponse create(MedicalRecordRequest medicalRecordRequest, List<MultipartFile> files) {
         MedicalRecord medicalRecord = medicalRecordMapper.toModel(medicalRecordRequest);
+        AppointmentResponse appointmentResponse = getAppointment(medicalRecord.getAppointment());
 
+        medicalRecordMapper.updateModel(medicalRecord, appointmentResponse);
         if (files != null) {
             medicalRecord.setFileKeys(fileService.upload(files));
         }
@@ -108,5 +116,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     public MedicalRecord getOrThrow(String medicalRecordId) {
         Optional<MedicalRecord> optionalMedicalRecord = medicalRecordRepository.findById(medicalRecordId);
         return optionalMedicalRecord.orElseThrow(MedicalRecordNotFoundException::new);
+    }
+
+    private AppointmentResponse getAppointment(UUID appointmentId) {
+        try {
+            return appointmentFeignClient.findAppointment(appointmentId);
+        } catch (OtherServiceNotFoundException e) {
+            throw new AppointmentNotFoundException();
+        }
     }
 }

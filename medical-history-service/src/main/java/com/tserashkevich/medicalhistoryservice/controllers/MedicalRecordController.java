@@ -38,7 +38,7 @@ public class MedicalRecordController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MedicalRecordResponse updateMedicalRecord(@PathVariable String id,
                                                      @Valid @RequestPart MedicalRecordRequest medicalRecordRequest,
-                                                     @RequestPart List<MultipartFile> files) {
+                                                     @RequestPart(required = false) List<MultipartFile> files) {
         return medicalRecordService.update(id, medicalRecordRequest, files);
     }
 

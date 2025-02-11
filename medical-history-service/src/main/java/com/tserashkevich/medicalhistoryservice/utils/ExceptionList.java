@@ -11,8 +11,12 @@ import java.util.Locale;
 @AllArgsConstructor
 public enum ExceptionList {
     MEDICAL_RECORD_NOT_FOUND("medical.record.not.found"),
+    APPOINTMENT_NOT_FOUND("appointment.not.found"),
     FILE_PROCESSING_ERROR("file.processing.error"),
-    BAD_FILE("bad.file");
+    BAD_FILE("bad.file"),
+    BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
+    NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
+    SERVER_OTHER_SERVICE("server.other.service");
 
     private static MessageSource messageSource;
 

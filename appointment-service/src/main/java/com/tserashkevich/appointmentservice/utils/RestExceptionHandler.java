@@ -4,6 +4,9 @@ import com.tserashkevich.appointmentservice.dtos.ExceptionResponse;
 import com.tserashkevich.appointmentservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.appointmentservice.dtos.Violation;
 import com.tserashkevich.appointmentservice.exceptions.*;
+import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceBadRequestException;
+import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -60,5 +63,26 @@ public class RestExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse("Wrong request parameter: " + ex.getName()));
+    }
+
+    @ExceptionHandler(OtherServiceBadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceBadRequestException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceNotFoundException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceServerException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceServerException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponse(ex.getMessage()));
     }
 }

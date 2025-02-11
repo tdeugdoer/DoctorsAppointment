@@ -3,9 +3,13 @@ package com.tserashkevich.medicalhistoryservice.utils;
 import com.tserashkevich.medicalhistoryservice.dtos.ExceptionResponse;
 import com.tserashkevich.medicalhistoryservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.medicalhistoryservice.dtos.Violation;
+import com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.BadFileException;
 import com.tserashkevich.medicalhistoryservice.exceptions.FileProcessingException;
 import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordNotFoundException;
+import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceBadRequestException;
+import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,7 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class RestExceptionHandler {
-    @ExceptionHandler(MedicalRecordNotFoundException.class)
+    @ExceptionHandler({MedicalRecordNotFoundException.class, AppointmentNotFoundException.class})
     public ResponseEntity<ExceptionResponse> handleNotFoundException(RuntimeException ex) {
         log.error(LogList.NOT_FOUND_ERROR, ex.getMessage());
         return ResponseEntity
@@ -69,5 +73,26 @@ public class RestExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse("Wrong request parameter: " + ex.getName()));
+    }
+
+    @ExceptionHandler(OtherServiceBadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceBadRequestException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceNotFoundException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceServerException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceServerException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponse(ex.getMessage()));
     }
 }

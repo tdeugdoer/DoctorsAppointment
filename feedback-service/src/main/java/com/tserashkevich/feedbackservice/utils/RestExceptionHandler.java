@@ -7,6 +7,9 @@ import com.tserashkevich.feedbackservice.exceptions.AppointmentNotCompletedExcep
 import com.tserashkevich.feedbackservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackExistException;
 import com.tserashkevich.feedbackservice.exceptions.FeedbackNotFoundException;
+import com.tserashkevich.feedbackservice.exceptions.feign.OtherServiceBadRequestException;
+import com.tserashkevich.feedbackservice.exceptions.feign.OtherServiceNotFoundException;
+import com.tserashkevich.feedbackservice.exceptions.feign.OtherServiceServerException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -62,5 +65,26 @@ public class RestExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse("Wrong request parameter: " + ex.getName()));
+    }
+
+    @ExceptionHandler(OtherServiceBadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceBadRequestException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceNotFoundException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OtherServiceServerException.class)
+    public ResponseEntity<ExceptionResponse> handleOtherServiceServerException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponse(ex.getMessage()));
     }
 }

@@ -5,6 +5,14 @@ spring:
     mongodb:
       uri: ${MONGO_URI}
       database: ${MONGO_DATABASE}
+  cloud:
+    openfeign:
+      client:
+        config:
+          appointment:
+            url: http://appointment-service:8082/api/v1/appointments
+            connect-timeout: 3000
+            read-timeout: 5000
 
 minio:
   bucket: ${MINIO_BUCKET}
