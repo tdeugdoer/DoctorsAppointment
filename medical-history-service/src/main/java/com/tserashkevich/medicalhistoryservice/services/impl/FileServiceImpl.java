@@ -55,28 +55,6 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void update(String key, MultipartFile file) {
-        fileCheck(file);
-        if (key.isEmpty()) {
-            key = generateKey(file);
-        }
-
-        try {
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .stream(file.getInputStream(), file.getInputStream().available(), -1)
-                            .bucket(minioProperties.getBucket())
-                            .object(key)
-                            .build()
-            );
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new FileProcessingException();
-        }
-        log.info(LogList.UPDATE_FILE, key);
-    }
-
-    @Override
     public void delete(String key) {
         try {
             minioClient.removeObject(
@@ -113,11 +91,6 @@ public class FileServiceImpl implements FileService {
             log.error(e.getMessage());
             throw new FileProcessingException();
         }
-    }
-
-    @Override
-    public List<String> get(List<String> keys) {
-        return keys.stream().map(this::get).toList();
     }
 
     private void fileCheck(MultipartFile file) {

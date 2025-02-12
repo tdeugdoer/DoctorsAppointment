@@ -19,6 +19,13 @@ public class MedicalRecordResponse {
     private final List<String> treatments;
     private final List<String> allergies;
     private final List<String> recommendations;
-    private final List<String> files;
+    private final List<FileInformation> files;
     private final String notes;
+
+    @Getter
+    @Builder
+    public static class FileInformation {
+        private final String fileKey;
+        private final String link;
+    }
 }

@@ -30,4 +30,10 @@ public class MedicalRecord {
     private List<String> recommendations;
     private List<String> fileKeys;
     private String notes;
+
+    public void addFileKeys(List<String> fileKeys) {
+        if (this.fileKeys == null) {
+            this.fileKeys = fileKeys;
+        } else this.fileKeys.addAll(fileKeys);
+    }
 }

@@ -1,9 +1,6 @@
 package com.tserashkevich.medicalhistoryservice.controllers;
 
-import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
-import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
-import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
-import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.*;
 import com.tserashkevich.medicalhistoryservice.services.MedicalRecordService;
 import com.tserashkevich.medicalhistoryservice.utils.SortList;
 import jakarta.validation.Valid;
@@ -37,9 +34,9 @@ public class MedicalRecordController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MedicalRecordResponse updateMedicalRecord(@PathVariable String id,
-                                                     @Valid @RequestPart MedicalRecordRequest medicalRecordRequest,
+                                                     @Valid @RequestPart UpdateMedicalRecordRequest updateMedicalRecordRequest,
                                                      @RequestPart(required = false) List<MultipartFile> files) {
-        return medicalRecordService.update(id, medicalRecordRequest, files);
+        return medicalRecordService.update(id, updateMedicalRecordRequest, files);
     }
 
     @DeleteMapping("/{id}")
@@ -80,5 +77,12 @@ public class MedicalRecordController {
     @GetMapping("/search/{searchLine}")
     public List<MedicalRecordResponse> searchMedicalRecords(@PathVariable String searchLine) {
         return medicalRecordService.search(searchLine);
+    }
+
+    @DeleteMapping("/{medicalRecordId}/delete-file/{fileKey}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFile(@PathVariable String medicalRecordId,
+                           @PathVariable String fileKey) {
+        medicalRecordService.deleteFile(medicalRecordId, fileKey);
     }
 }

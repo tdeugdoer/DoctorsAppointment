@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LogList {
     public final String NOT_FOUND_ERROR = "Not found exception thrown: {}";
+    public final String MISSING_FILE_KEY_ERROR = "Medical record is missing the file key: {}";
     public final String METHOD_ARGUMENT_ERROR = "Not valid method argument exception thrown: {}";
     public final String CONSTRAINT_VIOLATION_ERROR = "Failed parameter verification exception thrown: {}";
     public final String BAD_REQUEST_OTHER_SERVICE = "Bad request, other service: {}";
@@ -19,7 +20,6 @@ public class LogList {
     public final String FILE_PROCESSING_ERROR = "File processing error";
     public final String BAD_FILE = "Bad file";
     public final String UPLOAD_FILE = "File uploaded with key: {}";
-    public final String UPDATE_FILE = "File updated with key: {}";
     public final String DELETE_FILE = "File deleted with key: {}";
     public final String GET_FILE = "File got with key: {}";
 }

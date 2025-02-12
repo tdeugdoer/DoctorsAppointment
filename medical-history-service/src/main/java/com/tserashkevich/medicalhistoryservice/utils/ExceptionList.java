@@ -11,6 +11,7 @@ import java.util.Locale;
 @AllArgsConstructor
 public enum ExceptionList {
     MEDICAL_RECORD_NOT_FOUND("medical.record.not.found"),
+    MEDICAL_RECORD_MISSING_FILE_KEY("medical.record.missing.file.key"),
     APPOINTMENT_NOT_FOUND("appointment.not.found"),
     FILE_PROCESSING_ERROR("file.processing.error"),
     BAD_FILE("bad.file"),

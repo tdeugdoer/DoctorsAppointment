@@ -1,11 +1,9 @@
 package com.tserashkevich.medicalhistoryservice.services.impl;
 
-import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
-import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
-import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
-import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.*;
 import com.tserashkevich.medicalhistoryservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordMissingFileKeyException;
 import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceNotFoundException;
 import com.tserashkevich.medicalhistoryservice.feign.AppointmentFeignClient;
@@ -60,8 +58,20 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public MedicalRecordResponse update(String id, MedicalRecordRequest medicalRecordRequest, List<MultipartFile> files) {
-        return null;
+    public MedicalRecordResponse update(String medicalRecordId,
+                                        UpdateMedicalRecordRequest updateMedicalRecordRequest,
+                                        List<MultipartFile> files) {
+        MedicalRecord medicalRecord = getOrThrow(medicalRecordId);
+
+        medicalRecordMapper.updateModel(medicalRecord, updateMedicalRecordRequest);
+        if (files != null) {
+            medicalRecord.addFileKeys(fileService.upload(files));
+        }
+
+        medicalRecordRepository.save(medicalRecord);
+        log.info(LogList.EDIT_MEDICAL_RECORD, medicalRecordId);
+
+        return medicalRecordMapper.toResponse(medicalRecord);
     }
 
     @Override
@@ -82,7 +92,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .add(findAllParams.getPatient(), Criteria.where("patient").is(findAllParams.getPatient()))
                 .add(findAllParams.getAppointment(), Criteria.where("appointment").is(findAllParams.getAppointment()))
                 .add(findAllParams.getDoctor(), Criteria.where("doctor").is(findAllParams.getDoctor()))
-                .add(findAllParams.getDiagnosis(), Criteria.where("diagnosis").regex(findAllParams.getDiagnosis() == null ? ".*" : findAllParams.getDiagnosis(), "i"))
+                .add(findAllParams.getDiagnosis(),
+                        Criteria.where("diagnosis").regex(findAllParams.getDiagnosis() == null ? ".*" : findAllParams.getDiagnosis(), "i"))
                 .add(findAllParams.getDateOfVisitStart(), Criteria.where("dateOfVisit").gte(findAllParams.getDateOfVisitStart()))
                 .add(findAllParams.getDateOfVisitEnd(), Criteria.where("dateOfVisit").lte(findAllParams.getDateOfVisitEnd()))
                 .with(pageable)
@@ -99,6 +110,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public MedicalRecordResponse findById(String medicalRecordId) {
         MedicalRecord medicalRecord = getOrThrow(medicalRecordId);
@@ -106,11 +118,22 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         return medicalRecordMapper.toResponse(medicalRecord);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MedicalRecordResponse> search(String searchLine) {
         List<MedicalRecord> medicalRecords = medicalRecordRepository.findBySearchLine(searchLine);
         log.info(LogList.SEARCH_RECORDS, medicalRecords);
         return medicalRecordMapper.toResponses(medicalRecords);
+    }
+
+    @Transactional
+    @Override
+    public void deleteFile(String medicalRecordId, String fileKey) {
+        MedicalRecord medicalRecord = getOrThrow(medicalRecordId);
+        if (medicalRecord.getFileKeys().remove(fileKey)) {
+            medicalRecordRepository.save(medicalRecord);
+            fileService.delete(fileKey);
+        } else throw new MedicalRecordMissingFileKeyException();
     }
 
     public MedicalRecord getOrThrow(String medicalRecordId) {
