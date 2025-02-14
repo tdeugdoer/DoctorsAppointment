@@ -82,6 +82,11 @@ public class AppointmentController {
         return appointmentService.search(searchLine);
     }
 
+    @PatchMapping("/free/{appointmentId}")
+    public AppointmentResponse freeAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.free(appointmentId);
+    }
+
     @PatchMapping("/book/{appointmentId}/{patientId}")
     public AppointmentResponse bookAppointment(@PathVariable UUID appointmentId,
                                                @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)

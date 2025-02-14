@@ -38,6 +38,14 @@ public class RestExceptionHandler {
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(AppointmentAlreadyCompletedException.class)
+    public ResponseEntity<ExceptionResponse> handleAppointmentAlreadyCompletedException(RuntimeException ex) {
+        log.error(LogList.ALREADY_COMPLETED, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         final List<Violation> violations = ex.getBindingResult().getFieldErrors().stream()

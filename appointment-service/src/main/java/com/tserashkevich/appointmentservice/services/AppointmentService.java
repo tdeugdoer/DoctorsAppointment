@@ -19,6 +19,8 @@ public interface AppointmentService {
 
     List<AppointmentResponse> search(String searchLine);
 
+    AppointmentResponse free(UUID appointmentId);
+
     AppointmentResponse book(UUID appointmentId, UUID patientId);
 
     AppointmentResponse complete(UUID appointmentId);

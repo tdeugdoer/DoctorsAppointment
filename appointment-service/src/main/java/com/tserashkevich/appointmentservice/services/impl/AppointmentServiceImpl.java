@@ -109,9 +109,23 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public AppointmentResponse free(UUID appointmentId) {
+        Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+
+        appointment.setPatient(null);
+        appointment.setStatus(Status.FREE);
+        appointmentRepository.save(appointment);
+
+        log.info(LogList.FREE_APPOINTMENT, appointment);
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
     public AppointmentResponse book(UUID appointmentId, UUID patientId) {
         checkPatient(patientId);
         Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
 
         appointment.setPatient(patientId);
         appointment.setStatus(Status.BOOKED);
@@ -124,6 +138,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public AppointmentResponse complete(UUID appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
 
         appointment.setStatus(Status.COMPLETED);
         appointmentRepository.save(appointment);
@@ -158,15 +173,21 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    private void checkPatient(UUID patientId) {
+        if (!patientFeignClient.getExistPatient(patientId))
+            throw new PatientNotExistException();
+    }
+
     private void checkMatchingSpecialization(String serviceSpecialization, String doctorSpecialization) {
         if (!serviceSpecialization.equals(doctorSpecialization)) {
             throw new DoctorNotMatchServiceException();
         }
     }
 
-    private void checkPatient(UUID patientId) {
-        if (!patientFeignClient.getExistPatient(patientId))
-            throw new PatientNotExistException();
+    private void checkAppointmentNotCompleted(Appointment appointment) {
+        if (appointment.getStatus().equals(Status.COMPLETED)) {
+            throw new AppointmentAlreadyCompletedException();
+        }
     }
 
     private BigDecimal countPrice(BigDecimal price, Integer experience) {
