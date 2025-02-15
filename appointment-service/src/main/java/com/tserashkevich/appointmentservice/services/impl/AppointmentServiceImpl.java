@@ -58,7 +58,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         log.info(LogList.CREATE_APPOINTMENT, appointment.getId());
         return appointmentMapper.toResponse(appointment);
-
     }
 
     @Override
@@ -109,9 +108,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public AppointmentResponse free(UUID appointmentId) {
+        Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
+
+        appointment.setPatient(null);
+        appointment.setStatus(Status.FREE);
+        appointmentRepository.save(appointment);
+
+        log.info(LogList.FREE_APPOINTMENT, appointment);
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
     public AppointmentResponse book(UUID appointmentId, UUID patientId) {
         checkPatient(patientId);
         Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
 
         appointment.setPatient(patientId);
         appointment.setStatus(Status.BOOKED);
@@ -122,8 +137,36 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public AppointmentResponse checkIn(UUID appointmentId) {
+        Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
+
+        appointment.setStatus(Status.CHECKED_IN);
+        appointmentRepository.save(appointment);
+
+        log.info(LogList.CHECK_IN_APPOINTMENT, appointment);
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
+    public AppointmentResponse inProgress(UUID appointmentId) {
+        Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
+
+        appointment.setStatus(Status.IN_PROGRESS);
+        appointmentRepository.save(appointment);
+
+        log.info(LogList.IN_PROGRESS_APPOINTMENT, appointment);
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
     public AppointmentResponse complete(UUID appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
 
         appointment.setStatus(Status.COMPLETED);
         appointmentRepository.save(appointment);
@@ -133,8 +176,22 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public AppointmentResponse noShow(UUID appointmentId) {
+        Appointment appointment = getOrThrow(appointmentId);
+        checkAppointmentNotCompleted(appointment);
+        checkAppointmentNotNoShow(appointment);
+
+        appointment.setStatus(Status.NO_SHOW);
+        appointmentRepository.save(appointment);
+
+        log.info(LogList.NO_SHOW_APPOINTMENT, appointment);
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
     public List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId) {
-        return appointmentMapper.toResponses(appointmentRepository.findByStatusAndDoctor(Status.FREE, doctorId, SortList.DATE_ASC.getValue()));
+        List<Appointment> appointments = appointmentRepository.findByStatusAndDoctor(Status.FREE, doctorId, SortList.DATE_ASC.getValue());
+        return appointmentMapper.toResponses(appointments);
     }
 
     private Appointment getOrThrow(UUID appointmentId) {
@@ -158,15 +215,27 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    private void checkPatient(UUID patientId) {
+        if (!patientFeignClient.getExistPatient(patientId))
+            throw new PatientNotExistException();
+    }
+
     private void checkMatchingSpecialization(String serviceSpecialization, String doctorSpecialization) {
         if (!serviceSpecialization.equals(doctorSpecialization)) {
             throw new DoctorNotMatchServiceException();
         }
     }
 
-    private void checkPatient(UUID patientId) {
-        if (!patientFeignClient.getExistPatient(patientId))
-            throw new PatientNotExistException();
+    private void checkAppointmentNotCompleted(Appointment appointment) {
+        if (appointment.getStatus().equals(Status.COMPLETED)) {
+            throw new AppointmentAlreadyCompletedException();
+        }
+    }
+
+    private void checkAppointmentNotNoShow(Appointment appointment) {
+        if (appointment.getStatus().equals(Status.NO_SHOW)) {
+            throw new AppointmentAlreadyNoShowException();
+        }
     }
 
     private BigDecimal countPrice(BigDecimal price, Integer experience) {

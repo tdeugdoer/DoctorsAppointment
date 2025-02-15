@@ -19,9 +19,17 @@ public interface AppointmentService {
 
     List<AppointmentResponse> search(String searchLine);
 
+    AppointmentResponse free(UUID appointmentId);
+
     AppointmentResponse book(UUID appointmentId, UUID patientId);
 
+    AppointmentResponse checkIn(UUID appointmentId);
+
+    AppointmentResponse inProgress(UUID appointmentId);
+
     AppointmentResponse complete(UUID appointmentId);
+
+    AppointmentResponse noShow(UUID appointmentId);
 
     List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId);
 }

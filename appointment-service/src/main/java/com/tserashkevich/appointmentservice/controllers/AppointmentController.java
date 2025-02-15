@@ -82,6 +82,11 @@ public class AppointmentController {
         return appointmentService.search(searchLine);
     }
 
+    @PatchMapping("/free/{appointmentId}")
+    public AppointmentResponse freeAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.free(appointmentId);
+    }
+
     @PatchMapping("/book/{appointmentId}/{patientId}")
     public AppointmentResponse bookAppointment(@PathVariable UUID appointmentId,
                                                @NotBlank(message = ValidationList.PATIENT_ID_REQUIRED)
@@ -90,8 +95,23 @@ public class AppointmentController {
         return appointmentService.book(appointmentId, UUID.fromString(patientId));
     }
 
+    @PatchMapping("/check-in/{appointmentId}")
+    public AppointmentResponse checkInAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.checkIn(appointmentId);
+    }
+
+    @PatchMapping("/in-progress/{appointmentId}")
+    public AppointmentResponse inProgressAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.inProgress(appointmentId);
+    }
+
     @PatchMapping("/complete/{appointmentId}")
     public AppointmentResponse completeAppointment(@PathVariable UUID appointmentId) {
         return appointmentService.complete(appointmentId);
+    }
+
+    @PatchMapping("/no-show/{appointmentId}")
+    public AppointmentResponse noShowAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.noShow(appointmentId);
     }
 }
