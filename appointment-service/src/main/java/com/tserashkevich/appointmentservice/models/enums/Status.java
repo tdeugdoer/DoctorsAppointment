@@ -3,5 +3,8 @@ package com.tserashkevich.appointmentservice.models.enums;
 public enum Status {
     FREE,
     BOOKED,
-    COMPLETED
+    CHECKED_IN,
+    IN_PROGRESS,
+    COMPLETED,
+    NO_SHOW
 }

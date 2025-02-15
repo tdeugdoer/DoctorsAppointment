@@ -30,9 +30,10 @@ public class RestExceptionHandler {
                 .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(DoctorNotMatchServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleDoctorNotMatchServiceException(RuntimeException ex) {
-        log.error(LogList.NOT_MATCH_ERROR, ex.getMessage());
+    @ExceptionHandler({AppointmentAlreadyCompletedException.class, AppointmentAlreadyNoShowException.class,
+            DoctorNotMatchServiceException.class})
+    public ResponseEntity<ExceptionResponse> handleBadRequestException(RuntimeException ex) {
+        log.error(LogList.BAD_REQUEST_ERROR, ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(ex.getMessage()));

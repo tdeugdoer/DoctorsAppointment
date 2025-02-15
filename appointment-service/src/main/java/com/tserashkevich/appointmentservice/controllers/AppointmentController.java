@@ -95,8 +95,23 @@ public class AppointmentController {
         return appointmentService.book(appointmentId, UUID.fromString(patientId));
     }
 
+    @PatchMapping("/check-in/{appointmentId}")
+    public AppointmentResponse checkInAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.checkIn(appointmentId);
+    }
+
+    @PatchMapping("/in-progress/{appointmentId}")
+    public AppointmentResponse inProgressAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.inProgress(appointmentId);
+    }
+
     @PatchMapping("/complete/{appointmentId}")
     public AppointmentResponse completeAppointment(@PathVariable UUID appointmentId) {
         return appointmentService.complete(appointmentId);
+    }
+
+    @PatchMapping("/no-show/{appointmentId}")
+    public AppointmentResponse noShowAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.noShow(appointmentId);
     }
 }

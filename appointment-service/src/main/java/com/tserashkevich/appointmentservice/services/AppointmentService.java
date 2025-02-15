@@ -23,7 +23,13 @@ public interface AppointmentService {
 
     AppointmentResponse book(UUID appointmentId, UUID patientId);
 
+    AppointmentResponse checkIn(UUID appointmentId);
+
+    AppointmentResponse inProgress(UUID appointmentId);
+
     AppointmentResponse complete(UUID appointmentId);
+
+    AppointmentResponse noShow(UUID appointmentId);
 
     List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId);
 }
