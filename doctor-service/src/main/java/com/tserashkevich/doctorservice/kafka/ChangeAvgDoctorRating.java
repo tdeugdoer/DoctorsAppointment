@@ -20,4 +20,5 @@ public class ChangeAvgDoctorRating {
         log.info(LogList.RECEIVED_EVENT, changeAvgDoctorRatingEvent);
         doctorService.changeAvgRating(changeAvgDoctorRatingEvent);
     }
+
 }

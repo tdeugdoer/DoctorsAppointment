@@ -13,11 +13,12 @@ public class FindAllParams {
     private final Integer page;
     private final Integer limit;
     private final Sort sort;
-    private final UUID appointment;
+    private final String appointment;
     private final UUID service;
     private final UUID doctor;
     private final UUID patient;
     private final Integer rating;
     private final LocalDateTime dateStart;
     private final LocalDateTime dateEnd;
+
 }

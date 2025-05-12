@@ -22,4 +22,5 @@ public class LogList {
     public final String UPLOAD_FILE = "File uploaded with key: {}";
     public final String DELETE_FILE = "File deleted with key: {}";
     public final String GET_FILE = "File got with key: {}";
+
 }

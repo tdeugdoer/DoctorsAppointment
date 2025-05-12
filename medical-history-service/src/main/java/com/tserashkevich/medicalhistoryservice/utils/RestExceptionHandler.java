@@ -3,7 +3,11 @@ package com.tserashkevich.medicalhistoryservice.utils;
 import com.tserashkevich.medicalhistoryservice.dtos.ExceptionResponse;
 import com.tserashkevich.medicalhistoryservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.medicalhistoryservice.dtos.Violation;
-import com.tserashkevich.medicalhistoryservice.exceptions.*;
+import com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.medicalhistoryservice.exceptions.BadFileException;
+import com.tserashkevich.medicalhistoryservice.exceptions.FileProcessingException;
+import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordMissingFileKeyException;
+import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceBadRequestException;
 import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.feign.OtherServiceServerException;
@@ -100,4 +104,5 @@ public class RestExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponse(ex.getMessage()));
     }
+
 }

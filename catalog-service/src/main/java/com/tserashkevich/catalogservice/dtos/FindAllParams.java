@@ -16,4 +16,5 @@ public class FindAllParams {
     private final Specialization specialization;
     private final BigDecimal priceStart;
     private final BigDecimal priceEnd;
+
 }

@@ -1,24 +1,24 @@
 package com.tserashkevich.feedbackservice.dtos.feign;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class AppointmentResponse {
-    private UUID id;
-    private UUID service;
-    private UUID doctor;
-    private UUID patient;
-    private String status;
-    private LocalDateTime date;
-    private BigDecimal price;
+    private final String id;
+    private final UUID patient;
+    private final String status;
+    private final LocalDateTime date;
+    private final BigDecimal price;
+    private final String description;
+    private final String doctorWorkDayId;
+    private final List<ServiceResponse> service;
+    private final DoctorResponse doctor;
+
 }

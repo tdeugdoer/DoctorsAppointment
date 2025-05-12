@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 public class MedicalRecordResponse {
     private final String id;
-    private final UUID appointment;
+    private final String appointment;
     private final UUID patient;
     private final UUID doctor;
     private final LocalDate dateOfVisit;
@@ -27,5 +27,7 @@ public class MedicalRecordResponse {
     public static class FileInformation {
         private final String fileKey;
         private final String link;
+
     }
+
 }

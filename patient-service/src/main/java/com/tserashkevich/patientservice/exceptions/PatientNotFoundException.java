@@ -4,6 +4,7 @@ import com.tserashkevich.patientservice.utils.ExceptionList;
 
 public class PatientNotFoundException extends RuntimeException {
     public PatientNotFoundException() {
-        super(ExceptionList.PATIENT_NOT_FOUND.getValue());
+        super(ExceptionList.PATIENT_NOT_FOUND);
     }
+
 }

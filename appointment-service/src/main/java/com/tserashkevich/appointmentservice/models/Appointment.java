@@ -1,39 +1,36 @@
 package com.tserashkevich.appointmentservice.models;
 
+import com.tserashkevich.appointmentservice.dtos.feign.DoctorResponse;
+import com.tserashkevich.appointmentservice.dtos.feign.ServiceResponse;
 import com.tserashkevich.appointmentservice.models.enums.Status;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-@Entity
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "appointments")
+@Document(value = "appointments")
 public class Appointment {
     @Id
-    @UuidGenerator
-    private UUID id;
-
-    @Column(nullable = false)
-    private UUID service;
-
-    @Column(nullable = false)
-    private UUID doctor;
-
+    private String id;
+    private List<ServiceResponse> service;
+    private DoctorResponse doctor;
     private UUID patient;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 12)
     private Status status;
-
     private LocalDateTime date;
-
     private BigDecimal price;
+    private String doctorWorkDayId;
+
 }

@@ -3,7 +3,14 @@ package com.tserashkevich.appointmentservice.utils;
 import com.tserashkevich.appointmentservice.dtos.ExceptionResponse;
 import com.tserashkevich.appointmentservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.appointmentservice.dtos.Violation;
-import com.tserashkevich.appointmentservice.exceptions.*;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentAlreadyCompletedException;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentAlreadyNoShowException;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.appointmentservice.exceptions.DoctorNotExistException;
+import com.tserashkevich.appointmentservice.exceptions.DoctorNotMatchServiceException;
+import com.tserashkevich.appointmentservice.exceptions.DoctorWorkDayNotFoundException;
+import com.tserashkevich.appointmentservice.exceptions.PatientNotExistException;
+import com.tserashkevich.appointmentservice.exceptions.ServiceNotExistException;
 import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceBadRequestException;
 import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException;
 import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceServerException;
@@ -22,7 +29,7 @@ import java.util.List;
 @Slf4j
 public class RestExceptionHandler {
     @ExceptionHandler({AppointmentNotFoundException.class, ServiceNotExistException.class,
-            DoctorNotExistException.class, PatientNotExistException.class})
+            DoctorNotExistException.class, PatientNotExistException.class, DoctorWorkDayNotFoundException.class})
     public ResponseEntity<ExceptionResponse> handleNotFoundException(RuntimeException ex) {
         log.error(LogList.NOT_FOUND_ERROR, ex.getMessage());
         return ResponseEntity
@@ -34,14 +41,6 @@ public class RestExceptionHandler {
             DoctorNotMatchServiceException.class})
     public ResponseEntity<ExceptionResponse> handleBadRequestException(RuntimeException ex) {
         log.error(LogList.BAD_REQUEST_ERROR, ex.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(AppointmentAlreadyCompletedException.class)
-    public ResponseEntity<ExceptionResponse> handleAppointmentAlreadyCompletedException(RuntimeException ex) {
-        log.error(LogList.ALREADY_COMPLETED, ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(ex.getMessage()));
@@ -94,4 +93,5 @@ public class RestExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponse(ex.getMessage()));
     }
+
 }

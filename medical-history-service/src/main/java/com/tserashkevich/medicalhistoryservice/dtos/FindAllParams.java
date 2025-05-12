@@ -19,4 +19,5 @@ public class FindAllParams {
     private final String diagnosis;
     private final LocalDate dateOfVisitStart;
     private final LocalDate dateOfVisitEnd;
+
 }

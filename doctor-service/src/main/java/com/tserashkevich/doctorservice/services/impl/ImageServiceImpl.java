@@ -105,4 +105,5 @@ public class ImageServiceImpl implements ImageService {
                 .substring(file.getOriginalFilename()
                         .lastIndexOf(".") + 1);
     }
+
 }

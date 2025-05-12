@@ -20,4 +20,5 @@ public class LogList {
     public final String BAD_REQUEST_OTHER_SERVICE = "Bad request, other service: {}";
     public final String NOT_FOUND_OTHER_SERVICE = "Not found, other service: {}";
     public final String SERVER_OTHER_SERVICE = "Server, other service: {}";
+
 }

@@ -13,5 +13,7 @@ public class ServiceResponse {
     private final String name;
     private final String specialization;
     private final BigDecimal price;
+    private final Integer duration;
     private final String description;
+
 }

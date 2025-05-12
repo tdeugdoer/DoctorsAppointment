@@ -4,6 +4,7 @@ import com.tserashkevich.appointmentservice.utils.ExceptionList;
 
 public class AppointmentAlreadyNoShowException extends RuntimeException {
     public AppointmentAlreadyNoShowException() {
-        super(ExceptionList.APPOINTMENT_ALREADY_COMPLETED.getValue());
+        super(ExceptionList.APPOINTMENT_ALREADY_NO_SHOW);
     }
+
 }

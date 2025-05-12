@@ -10,7 +10,9 @@ public enum SortList {
     ID_ASC(Sort.by(Sort.Direction.ASC, "id")),
     ID_DESC(Sort.by(Sort.Direction.DESC, "id")),
     BIRTH_PRICE_ASC(Sort.by(Sort.Direction.ASC, "price")),
-    BIRTH_PRICE_DESC(Sort.by(Sort.Direction.DESC, "price"));
+    BIRTH_PRICE_DESC(Sort.by(Sort.Direction.DESC, "price")),
+    DURATION_ASC(Sort.by(Sort.Direction.ASC, "duration")),
+    DURATION_DESC(Sort.by(Sort.Direction.DESC, "duration"));
 
     private final Sort value;
 }

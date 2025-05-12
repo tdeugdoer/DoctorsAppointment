@@ -51,6 +51,7 @@ public class KafkaConfig {
                 .name(Objects.requireNonNull(environment.getProperty("spring.kafka.producer.change-avg-doctor-rating-topic.name")))
                 .build();
     }
+
 }
 
 

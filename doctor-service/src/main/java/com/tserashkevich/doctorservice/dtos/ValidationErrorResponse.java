@@ -9,4 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ValidationErrorResponse {
     private final List<Violation> violations;
+
 }

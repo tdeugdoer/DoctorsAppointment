@@ -1,6 +1,10 @@
 package com.tserashkevich.medicalhistoryservice.services;
 
-import com.tserashkevich.medicalhistoryservice.dtos.*;
+import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.UpdateMedicalRecordRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,4 +23,5 @@ public interface MedicalRecordService {
     List<MedicalRecordResponse> search(String searchLine);
 
     void deleteFile(String medicalRecordId, String fileKey);
+
 }

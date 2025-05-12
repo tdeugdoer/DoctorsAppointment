@@ -9,6 +9,12 @@ import java.util.List;
 
 @Repository
 public interface MedicalRecordRepository extends MongoRepository<MedicalRecord, String> {
-    @Query("{ $or: [ { 'diagnosis': { $regex: ?0, $options: 'i' } }, { 'treatments': { $regex: ?0, $options: 'i' } }, { 'allergies': { $regex: ?0, $options: 'i' } }, { 'recommendations': { $regex: ?0, $options: 'i' } } ] }")
+    @Query("{ $or: [ " +
+            "{ 'diagnosis': { $regex: ?0, $options: 'i' } }," +
+            "{ 'treatments': { $regex: ?0, $options: 'i' } }," +
+            "{ 'allergies': { $regex: ?0, $options: 'i' } }," +
+            "{ 'recommendations': { $regex: ?0, $options: 'i' } }" +
+            "] }")
     List<MedicalRecord> findBySearchLine(String searchLine);
+
 }

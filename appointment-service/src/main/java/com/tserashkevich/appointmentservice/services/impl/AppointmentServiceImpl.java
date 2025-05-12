@@ -1,31 +1,30 @@
 package com.tserashkevich.appointmentservice.services.impl;
 
-import com.querydsl.core.types.Predicate;
-import com.tserashkevich.appointmentservice.dtos.AppointmentResponse;
-import com.tserashkevich.appointmentservice.dtos.CreateAppointmentRequest;
-import com.tserashkevich.appointmentservice.dtos.FindAllParams;
 import com.tserashkevich.appointmentservice.dtos.PageResponse;
-import com.tserashkevich.appointmentservice.dtos.feign.DoctorResponse;
-import com.tserashkevich.appointmentservice.dtos.feign.ServiceResponse;
-import com.tserashkevich.appointmentservice.exceptions.*;
-import com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException;
-import com.tserashkevich.appointmentservice.feign.DoctorFeignClient;
-import com.tserashkevich.appointmentservice.feign.PatientFeignClient;
-import com.tserashkevich.appointmentservice.feign.ServiceFeignClient;
+import com.tserashkevich.appointmentservice.dtos.appointment.AppointmentFindAllParams;
+import com.tserashkevich.appointmentservice.dtos.appointment.AppointmentResponse;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentAlreadyCompletedException;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentAlreadyNoShowException;
+import com.tserashkevich.appointmentservice.exceptions.AppointmentNotFoundException;
+import com.tserashkevich.appointmentservice.feign.ExternalServiceClient;
 import com.tserashkevich.appointmentservice.mappers.AppointmentMapper;
 import com.tserashkevich.appointmentservice.models.Appointment;
-import com.tserashkevich.appointmentservice.models.QAppointment;
 import com.tserashkevich.appointmentservice.models.enums.Status;
 import com.tserashkevich.appointmentservice.repositories.AppointmentRepository;
+import com.tserashkevich.appointmentservice.services.AppointmentGenerateService;
 import com.tserashkevich.appointmentservice.services.AppointmentService;
+import com.tserashkevich.appointmentservice.utils.AppointmentSortList;
 import com.tserashkevich.appointmentservice.utils.LogList;
-import com.tserashkevich.appointmentservice.utils.QPredicates;
-import com.tserashkevich.appointmentservice.utils.SortList;
+import com.tserashkevich.appointmentservice.utils.QueryPredicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,53 +39,60 @@ import java.util.UUID;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
-    private final ServiceFeignClient serviceFeignClient;
-    private final DoctorFeignClient doctorFeignClient;
-    private final PatientFeignClient patientFeignClient;
+    private final MongoTemplate mongoTemplate;
+    private final ExternalServiceClient externalServiceClient;
+    private final AppointmentGenerateService appointmentGenerateService;
 
     @Override
-    public AppointmentResponse create(CreateAppointmentRequest createAppointmentRequest) {
-        Appointment appointment = appointmentMapper.toModel(createAppointmentRequest);
-
-        ServiceResponse serviceResponse = checkService(appointment.getService());
-        DoctorResponse doctorResponse = checkDoctor(appointment.getDoctor());
-        checkMatchingSpecialization(serviceResponse.getSpecialization(), doctorResponse.getSpecialization());
-
-        appointment.setStatus(Status.FREE);
-        appointment.setPrice(countPrice(serviceResponse.getPrice(), doctorResponse.getExperience()));
-        appointmentRepository.save(appointment);
-
-        log.info(LogList.CREATE_APPOINTMENT, appointment.getId());
-        return appointmentMapper.toResponse(appointment);
+    public AppointmentResponse create(List<Appointment> appointments) {
+//        Appointment appointment = appointmentMapper.toModel(appointmentRequest);
+//
+//        ServiceResponse serviceResponse = checkService(appointment.getService());
+//        DoctorResponse doctorResponse = checkDoctor(appointment.getDoctor());
+//        checkMatchingSpecialization(serviceResponse.getSpecialization(), doctorResponse.getSpecialization());
+//
+//        appointment.setStatus(Status.FREE);
+//        appointment.setPrice(countPrice(serviceResponse.getPrice(), doctorResponse.getExperience()));
+//        appointmentRepository.save(appointment);
+//
+//        log.info(LogList.CREATE_APPOINTMENT, appointment.getId());
+//        return appointmentMapper.toResponse(appointment);
+        return AppointmentResponse.builder().build();
     }
 
     @Override
-    public void delete(UUID appointmentId) {
+    public void delete(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
-
         appointmentRepository.delete(appointment);
-
         log.info(LogList.DELETE_APPOINTMENT, appointmentId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public PageResponse<AppointmentResponse> findAll(FindAllParams findAllParams) {
-        Pageable pageable = PageRequest.of(findAllParams.getPage(), findAllParams.getLimit(), findAllParams.getSort());
-        Predicate predicate = QPredicates.builder()
-                .add(findAllParams.getStatus(), QAppointment.appointment.status::eq)
-                .add(findAllParams.getDateStart(), QAppointment.appointment.date::before)
-                .add(findAllParams.getDateEnd(), QAppointment.appointment.date::after)
-                .add(findAllParams.getPriceStart(), QAppointment.appointment.price::goe)
-                .add(findAllParams.getPriceEnd(), QAppointment.appointment.price::lt)
+    public PageResponse<AppointmentResponse> findAll(AppointmentFindAllParams appointmentFindAllParams) {
+        Pageable pageable = PageRequest.of(appointmentFindAllParams.getPage(), appointmentFindAllParams.getLimit(), appointmentFindAllParams.getSort());
+        Query query = QueryPredicate.builder()
+                .add(appointmentFindAllParams.getStatus(),
+                        Criteria.where("status").is(appointmentFindAllParams.getStatus()))
+                .add(appointmentFindAllParams.getDateStart(),
+                        Criteria.where("date").gte(appointmentFindAllParams.getDateStart()))
+                .add(appointmentFindAllParams.getDateEnd(),
+                        Criteria.where("date").lte(appointmentFindAllParams.getDateEnd()))
+                .add(appointmentFindAllParams.getPriceStart(),
+                        Criteria.where("price").gte(appointmentFindAllParams.getPriceStart()))
+                .add(appointmentFindAllParams.getPriceEnd(),
+                        Criteria.where("price").lte(appointmentFindAllParams.getPriceEnd()))
+                .with(pageable)
                 .build();
 
-        Page<Appointment> appointmentPage = appointmentRepository.findAll(predicate, pageable);
-        List<AppointmentResponse> appointmentResponses = appointmentMapper.toResponses(appointmentPage.getContent());
+        Page<Appointment> appointmentPage = PageableExecutionUtils.getPage(mongoTemplate.find(query, Appointment.class),
+                pageable,
+                () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1),
+                        Appointment.class));
 
         log.info(LogList.FIND_ALL_APPOINTMENTS);
         return PageResponse.<AppointmentResponse>builder()
-                .objectList(appointmentResponses)
+                .objectList(appointmentMapper.toResponses(appointmentPage.getContent()))
                 .totalElements(appointmentPage.getTotalElements())
                 .totalPages(appointmentPage.getTotalPages())
                 .build();
@@ -94,7 +100,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional(readOnly = true)
     @Override
-    public AppointmentResponse findById(UUID appointmentId) {
+    public AppointmentResponse findById(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         log.info(LogList.FIND_APPOINTMENT, appointmentId);
         return appointmentMapper.toResponse(appointment);
@@ -108,7 +114,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponse free(UUID appointmentId) {
+    public AppointmentResponse free(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
@@ -117,27 +123,34 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(Status.FREE);
         appointmentRepository.save(appointment);
 
+        appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
+
         log.info(LogList.FREE_APPOINTMENT, appointment);
         return appointmentMapper.toResponse(appointment);
     }
 
     @Override
-    public AppointmentResponse book(UUID appointmentId, UUID patientId) {
-        checkPatient(patientId);
+    public AppointmentResponse book(String appointmentId, UUID patientId, UUID serviceId) {
+        externalServiceClient.getPatient(patientId);
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
 
         appointment.setPatient(patientId);
         appointment.setStatus(Status.BOOKED);
+        appointment.setService(appointment.getService().stream()
+                .filter(service -> service.getId().equals(serviceId))
+                .toList());
         appointmentRepository.save(appointment);
+
+        appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
 
         log.info(LogList.BOOK_APPOINTMENT, appointment, patientId);
         return appointmentMapper.toResponse(appointment);
     }
 
     @Override
-    public AppointmentResponse checkIn(UUID appointmentId) {
+    public AppointmentResponse checkIn(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
@@ -150,7 +163,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponse inProgress(UUID appointmentId) {
+    public AppointmentResponse inProgress(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
@@ -163,7 +176,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponse complete(UUID appointmentId) {
+    public AppointmentResponse complete(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
@@ -171,12 +184,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(Status.COMPLETED);
         appointmentRepository.save(appointment);
 
+        appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
+
         log.info(LogList.COMPLETE_APPOINTMENT, appointmentId);
         return appointmentMapper.toResponse(appointment);
     }
 
     @Override
-    public AppointmentResponse noShow(UUID appointmentId) {
+    public AppointmentResponse noShow(String appointmentId) {
         Appointment appointment = getOrThrow(appointmentId);
         checkAppointmentNotCompleted(appointment);
         checkAppointmentNotNoShow(appointment);
@@ -190,40 +205,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId) {
-        List<Appointment> appointments = appointmentRepository.findByStatusAndDoctor(Status.FREE, doctorId, SortList.DATE_ASC.getValue());
+        List<Appointment> appointments = appointmentRepository.findByStatusAndDoctor_Id(Status.FREE, doctorId, AppointmentSortList.DATE_ASC.getValue());
         return appointmentMapper.toResponses(appointments);
     }
 
-    private Appointment getOrThrow(UUID appointmentId) {
-        Optional<Appointment> optionalPassenger = appointmentRepository.findById(appointmentId);
-        return optionalPassenger.orElseThrow(AppointmentNotFoundException::new);
-    }
-
-    private ServiceResponse checkService(UUID serviceId) {
-        try {
-            return serviceFeignClient.findService(serviceId);
-        } catch (OtherServiceNotFoundException e) {
-            throw new ServiceNotExistException();
-        }
-    }
-
-    private DoctorResponse checkDoctor(UUID doctorId) {
-        try {
-            return doctorFeignClient.findDoctor(doctorId);
-        } catch (OtherServiceNotFoundException e) {
-            throw new DoctorNotExistException();
-        }
-    }
-
-    private void checkPatient(UUID patientId) {
-        if (!patientFeignClient.getExistPatient(patientId))
-            throw new PatientNotExistException();
-    }
-
-    private void checkMatchingSpecialization(String serviceSpecialization, String doctorSpecialization) {
-        if (!serviceSpecialization.equals(doctorSpecialization)) {
-            throw new DoctorNotMatchServiceException();
-        }
+    private Appointment getOrThrow(String appointmentId) {
+        Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointmentId);
+        return optionalAppointment.orElseThrow(AppointmentNotFoundException::new);
     }
 
     private void checkAppointmentNotCompleted(Appointment appointment) {
@@ -243,4 +231,5 @@ public class AppointmentServiceImpl implements AppointmentService {
                 ? price
                 : BigDecimal.valueOf(experience.doubleValue() / 100 + 1);
     }
+
 }

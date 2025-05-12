@@ -30,4 +30,5 @@ public class QPredicates {
             return ExpressionUtils.allOf(Expressions.TRUE);
         } else return ExpressionUtils.allOf(predicates);
     }
+
 }

@@ -20,4 +20,5 @@ public class FindAllParams {
     private final Integer experienceEnd;
     private final LocalDate birthDateStart;
     private final LocalDate birthDateEnd;
+
 }

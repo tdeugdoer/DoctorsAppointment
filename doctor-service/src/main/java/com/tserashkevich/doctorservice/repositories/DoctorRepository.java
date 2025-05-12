@@ -20,4 +20,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID>, QuerydslP
             "or lower(e.surname) like lower(concat('%', :search, '%'))" +
             "or lower(e.phoneNumber) like lower(concat('%', :search, '%'))")
     List<Doctor> search(@Param("search") String searchLine);
+
 }

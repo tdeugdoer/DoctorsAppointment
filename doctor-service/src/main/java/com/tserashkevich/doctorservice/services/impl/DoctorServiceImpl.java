@@ -140,4 +140,5 @@ public class DoctorServiceImpl implements DoctorService {
         if (doctor.isPresent() && !doctor.get().getId().equals(doctorId))
             throw new PhoneAlreadyExistException();
     }
+
 }

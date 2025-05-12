@@ -18,4 +18,5 @@ public class MinioConfig {
                         minioProperties.getSecretKey())
                 .build();
     }
+
 }

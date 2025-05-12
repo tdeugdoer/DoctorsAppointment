@@ -16,4 +16,5 @@ public class UpdateMedicalRecordRequest {
     private final List<String> allergies;
     private final List<String> recommendations;
     private final String notes;
+
 }

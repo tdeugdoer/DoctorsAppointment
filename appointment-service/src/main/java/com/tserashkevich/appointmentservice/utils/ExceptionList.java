@@ -1,41 +1,20 @@
 package com.tserashkevich.appointmentservice.utils;
 
-import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import lombok.experimental.UtilityClass;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+@UtilityClass
+public class ExceptionList {
+    public final String APPOINTMENT_NOT_FOUND = "Запись не найден";
+    public final String DOCTOR_WORK_DAY_NOT_FOUND = "Рабочий день врача не найден";
+    public final String APPOINTMENT_ALREADY_COMPLETED = "Приём уже завершён";
+    public final String APPOINTMENT_ALREADY_NO_SHOW = "На прием никто не пришел";
+    public final String BAD_REQUEST_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Bad request)";
+    public final String NOT_FOUND_OTHER_SERVICE = "Объект не найден при запросе к другому сервису (Not found)";
+    public final String SERVER_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Server Error)";
+    public final String SERVICE_NOT_EXIST = "Услуги не существует";
+    public final String PATIENT_NOT_EXIST = "Пациент не существует";
+    public final String DOCTOR_NOT_EXIST = "Врач не существует";
+    public final String DOCTOR_NOT_MATCH_SERVICE_EXIST = "Специальность врача не соответствует услуге";
+    public final String APPOINTMENTS_GENERATE_FAIL = "Ошибка при генерации записей";
 
-@AllArgsConstructor
-public enum ExceptionList {
-    APPOINTMENT_NOT_FOUND("appointment.not.found"),
-    APPOINTMENT_ALREADY_COMPLETED("appointment.already.completed"),
-    APPOINTMENT_ALREADY_NO_SHOW("appointment.already.no-show"),
-    BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
-    NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
-    SERVER_OTHER_SERVICE("server.other.service"),
-    SERVICE_NOT_EXIST("service.not.exist"),
-    PATIENT_NOT_EXIST("patient.not.exist"),
-    DOCTOR_NOT_EXIST("doctor.not.exist"),
-    DOCTOR_NOT_MATCH_SERVICE_EXIST("doctor.not.match.service");
-
-    private static MessageSource messageSource;
-
-    static {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("exceptionMessages");
-        messageSource.setDefaultLocale(Locale.ENGLISH);
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ExceptionList.messageSource = messageSource;
-    }
-
-    private final String key;
-
-    public String getValue() {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(key, null, locale);
-    }
 }
-

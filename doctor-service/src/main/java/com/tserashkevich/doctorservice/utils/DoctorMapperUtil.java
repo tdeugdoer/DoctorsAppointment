@@ -15,4 +15,5 @@ public class DoctorMapperUtil {
     public String getImageUrl(String key) {
         return imageService.get(key);
     }
+
 }

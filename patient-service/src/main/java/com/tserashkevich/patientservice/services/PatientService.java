@@ -23,4 +23,5 @@ public interface PatientService {
     List<PatientResponse> search(String searchLine);
 
     Boolean exist(UUID patientId);
+
 }

@@ -2,7 +2,13 @@ package com.tserashkevich.doctorservice.dtos;
 
 import com.tserashkevich.doctorservice.utils.PatternList;
 import com.tserashkevich.doctorservice.utils.ValidationList;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -43,4 +49,5 @@ public class DoctorRequest {
     @NotNull(message = ValidationList.BIRTHDATE_REQUIRED)
     @Past(message = ValidationList.WRONG_BIRTHDATE)
     private final LocalDate birthDate;
+
 }

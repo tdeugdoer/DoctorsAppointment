@@ -4,7 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
@@ -24,7 +28,7 @@ public class Feedback {
     private UUID id;
 
     @Column(nullable = false)
-    private UUID appointment;
+    private String appointment;
 
     @Column(nullable = false)
     private UUID service;
@@ -42,4 +46,5 @@ public class Feedback {
     private LocalDateTime creationTime;
 
     private String comment;
+
 }

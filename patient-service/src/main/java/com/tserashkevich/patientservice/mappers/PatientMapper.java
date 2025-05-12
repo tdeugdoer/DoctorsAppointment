@@ -26,4 +26,5 @@ public interface PatientMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "image", ignore = true)
     void updateModel(@MappingTarget Patient patient, PatientRequest patientRequest);
+
 }

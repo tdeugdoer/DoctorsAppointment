@@ -4,5 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PatternList {
-    public final String SPECIALIZATION_PATTERN = "^(?:Therapy|Surgery|Pediatrics|Neurology|Dentistry|Gynecology|Dermatological|Other)$";
+    public final String SPECIALIZATION_PATTERN =
+            "^(?:Терапевт|Хирургия|Педиатрия|Неврология|Стоматология|Гинекология|Дерматология|Другое)$";
+
 }

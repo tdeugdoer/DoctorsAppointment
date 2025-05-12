@@ -1,6 +1,7 @@
 package com.tserashkevich.appointmentservice.feign;
 
 import com.tserashkevich.appointmentservice.configs.feign.FeignConfig;
+import com.tserashkevich.appointmentservice.dtos.feign.PatientResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @CircuitBreaker(name = "circuitbreaker-conf")
 @FeignClient(name = "patient", configuration = FeignConfig.class)
 public interface PatientFeignClient {
-    @GetMapping("/exist/{patientId}")
-    Boolean getExistPatient(@PathVariable UUID patientId);
+    @GetMapping("/{patientId}")
+    PatientResponse findPatient(@PathVariable UUID patientId);
+
 }

@@ -21,4 +21,5 @@ public class LogList {
     public final String GET_IMAGE = "Image got with key: {}";
     public final String SEARCH_DOCTOR = "Search with searchline: {}";
     public final String RECEIVED_EVENT = "Received event: {}";
+
 }

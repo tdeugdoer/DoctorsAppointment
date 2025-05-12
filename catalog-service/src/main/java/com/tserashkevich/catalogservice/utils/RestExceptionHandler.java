@@ -61,4 +61,5 @@ public class RestExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse("Wrong request parameter"));
     }
+
 }

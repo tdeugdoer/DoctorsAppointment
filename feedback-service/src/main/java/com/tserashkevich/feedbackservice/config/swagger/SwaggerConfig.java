@@ -18,4 +18,5 @@ public class SwaggerConfig {
                 )
                 .info(new Info().title("Feedback service rest api"));
     }
+
 }

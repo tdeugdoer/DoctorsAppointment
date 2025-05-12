@@ -55,5 +55,12 @@ resilience4j:
         ignore-exceptions:
           - com.tserashkevich.feedbackservice.exceptions.feign.OtherServiceNotFoundException
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
 server:
   port: ${SPRING_PORT}

@@ -16,4 +16,5 @@ import java.util.UUID;
 public interface DoctorFeignClient {
     @GetMapping("/{doctorId}")
     DoctorResponse findDoctor(@PathVariable UUID doctorId);
+
 }

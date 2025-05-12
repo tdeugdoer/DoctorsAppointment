@@ -31,4 +31,5 @@ public class ChangeAvgDoctorRatingProducer {
     private void recoverSendChangeAvgDoctorRatingEvent(KafkaException kafkaException, ChangeAvgDoctorRatingEvent changeAvgDoctorRatingEvent) {
         log.info(LogList.KAFKA_SEND_MESSAGE_FAIL, changeAvgDoctorRatingEvent, kafkaException.getMessage());
     }
+
 }

@@ -5,6 +5,7 @@ import com.tserashkevich.feedbackservice.utils.ExceptionList;
 
 public class OtherServiceNotFoundException extends RuntimeException {
     public OtherServiceNotFoundException() {
-        super(ExceptionList.NOT_FOUND_OTHER_SERVICE.getValue());
+        super(ExceptionList.NOT_FOUND_OTHER_SERVICE);
     }
+
 }

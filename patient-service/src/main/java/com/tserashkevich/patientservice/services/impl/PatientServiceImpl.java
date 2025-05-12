@@ -134,4 +134,5 @@ public class PatientServiceImpl implements PatientService {
         if (patient.isPresent() && !patient.get().getId().equals(patientId))
             throw new PhoneAlreadyExistException();
     }
+
 }

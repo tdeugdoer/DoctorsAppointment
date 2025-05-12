@@ -5,6 +5,7 @@ import com.tserashkevich.feedbackservice.utils.ExceptionList;
 
 public class AppointmentNotCompletedException extends RuntimeException {
     public AppointmentNotCompletedException() {
-        super(ExceptionList.APPOINTMENT_NOT_COMPLETED.getValue());
+        super(ExceptionList.APPOINTMENT_NOT_COMPLETED);
     }
+
 }

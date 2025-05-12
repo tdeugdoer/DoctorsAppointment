@@ -39,14 +39,9 @@ public interface MedicalRecordMapper {
     @Mapping(target = "fileKeys", ignore = true)
     void updateModel(@MappingTarget MedicalRecord medicalRecord, UpdateMedicalRecordRequest updateMedicalRecordRequest);
 
-    @Mapping(target = "dateOfVisit", source = "date")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fileKeys", ignore = true)
-    @Mapping(target = "treatments", ignore = true)
-    @Mapping(target = "recommendations", ignore = true)
-    @Mapping(target = "diagnosis", ignore = true)
-    @Mapping(target = "appointment", ignore = true)
-    @Mapping(target = "allergies", ignore = true)
-    @Mapping(target = "notes", ignore = true)
-    void updateModel(@MappingTarget MedicalRecord medicalRecord, AppointmentResponse appointmentResponse);
+    default void updateModel(@MappingTarget MedicalRecord medicalRecord, AppointmentResponse appointmentResponse) {
+        medicalRecord.setPatient(appointmentResponse.getPatient());
+        medicalRecord.setDoctor(appointmentResponse.getDoctor().getId());
+    }
+
 }

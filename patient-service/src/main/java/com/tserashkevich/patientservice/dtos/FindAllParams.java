@@ -16,4 +16,5 @@ public class FindAllParams {
     private final Gender gender;
     private final LocalDate birthDateStart;
     private final LocalDate birthDateEnd;
+
 }
