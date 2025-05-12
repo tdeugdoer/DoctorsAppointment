@@ -29,4 +29,5 @@ public interface DoctorMapper {
     @Mapping(target = "image", ignore = true)
     @Mapping(target = "rating", ignore = true)
     void updateModel(@MappingTarget Doctor doctor, DoctorRequest doctorRequest);
+
 }

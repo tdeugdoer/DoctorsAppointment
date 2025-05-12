@@ -3,17 +3,10 @@ spring:
     import: optional:classpath:.env[.properties]
   application:
     name: appointment-service
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
-    enabled: true
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+      database: ${MONGO_DATABASE}
   cloud:
     openfeign:
       client:
@@ -52,6 +45,17 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         ignore-exceptions:
           - com.tserashkevich.appointmentservice.exceptions.feign.OtherServiceNotFoundException
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+mongock:
+  migration-scan-package:
+    - com.tserashkevich.appointmentservice.migrations
 
 server:
   port: ${SPRING_PORT}

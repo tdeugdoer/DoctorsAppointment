@@ -1,6 +1,11 @@
 package com.tserashkevich.feedbackservice.config.swagger;
 
-import com.tserashkevich.feedbackservice.dtos.*;
+import com.tserashkevich.feedbackservice.dtos.ExceptionResponse;
+import com.tserashkevich.feedbackservice.dtos.FeedbackRequest;
+import com.tserashkevich.feedbackservice.dtos.FeedbackResponse;
+import com.tserashkevich.feedbackservice.dtos.PageResponse;
+import com.tserashkevich.feedbackservice.dtos.UpdateFeedbackRequest;
+import com.tserashkevich.feedbackservice.dtos.ValidationErrorResponse;
 import com.tserashkevich.feedbackservice.utils.FeedbackSortList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -54,7 +59,7 @@ public interface FeedbackApi {
     PageResponse<FeedbackResponse> findAllFeedbacks(@Parameter(description = "Page number") @RequestParam(defaultValue = "0") @Min(0) int page,
                                                     @Parameter(description = "Items limit") @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
                                                     @Parameter(description = "Sort value") @RequestParam(defaultValue = "ID_ASC") FeedbackSortList sort,
-                                                    @Parameter(description = "Filter appointmentId") @RequestParam(required = false) UUID appointmentId,
+                                                    @Parameter(description = "Filter appointmentId") @RequestParam(required = false) String appointmentId,
                                                     @Parameter(description = "Filter serviceId") @RequestParam(required = false) UUID serviceId,
                                                     @Parameter(description = "Filter doctorId") @RequestParam(required = false) UUID doctorId,
                                                     @Parameter(description = "Filter patientId") @RequestParam(required = false) UUID patientId,
@@ -88,4 +93,5 @@ public interface FeedbackApi {
     @ApiResponse(responseCode = "404", description = "Feedback not found",
             content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     List<FeedbackResponse> findDoctorFeedbacks(@Parameter(description = "Doctor ID") @PathVariable UUID doctorId);
+
 }

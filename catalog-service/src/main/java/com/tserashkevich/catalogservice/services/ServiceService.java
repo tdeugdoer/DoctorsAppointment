@@ -17,9 +17,12 @@ public interface ServiceService {
 
     PageResponse<ServiceResponse> findAll(FindAllParams findAllParams);
 
+    List<ServiceResponse> findAll(List<UUID> serviceIds);
+
     ServiceResponse findById(UUID serviceId);
 
     List<ServiceResponse> search(String searchLine);
 
     Boolean exist(UUID serviceId);
+
 }

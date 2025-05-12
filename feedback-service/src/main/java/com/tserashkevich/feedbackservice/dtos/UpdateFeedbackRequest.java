@@ -16,4 +16,5 @@ public class UpdateFeedbackRequest {
     private final Integer rating;
 
     private final String comment;
+
 }

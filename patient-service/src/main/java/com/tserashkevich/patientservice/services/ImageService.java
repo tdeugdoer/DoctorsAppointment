@@ -10,4 +10,5 @@ public interface ImageService {
     void delete(String key);
 
     String get(String key);
+
 }

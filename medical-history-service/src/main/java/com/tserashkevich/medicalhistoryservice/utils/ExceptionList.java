@@ -1,39 +1,16 @@
 package com.tserashkevich.medicalhistoryservice.utils;
 
-import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import lombok.experimental.UtilityClass;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+@UtilityClass
+public class ExceptionList {
+    public final String MEDICAL_RECORD_NOT_FOUND = "Медицинская запись не найдена";
+    public final String MEDICAL_RECORD_MISSING_FILE_KEY = "Medical record is missing the file key";
+    public final String APPOINTMENT_NOT_FOUND = "Запись, для которой создаётся медицинская запись, не существует";
+    public final String FILE_PROCESSING_ERROR = "Ошибка обработки файла";
+    public final String BAD_FILE = "Проблема с файлом";
+    public final String BAD_REQUEST_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Bad request)";
+    public final String NOT_FOUND_OTHER_SERVICE = "Объект не найден при запросе к другому сервису (Not found)";
+    public final String SERVER_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Server Error)";
 
-@AllArgsConstructor
-public enum ExceptionList {
-    MEDICAL_RECORD_NOT_FOUND("medical.record.not.found"),
-    MEDICAL_RECORD_MISSING_FILE_KEY("medical.record.missing.file.key"),
-    APPOINTMENT_NOT_FOUND("appointment.not.found"),
-    FILE_PROCESSING_ERROR("file.processing.error"),
-    BAD_FILE("bad.file"),
-    BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
-    NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
-    SERVER_OTHER_SERVICE("server.other.service");
-
-    private static MessageSource messageSource;
-
-    static {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("exceptionMessages");
-        messageSource.setDefaultLocale(Locale.ENGLISH);
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ExceptionList.messageSource = messageSource;
-    }
-
-    private final String key;
-
-    public String getValue() {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(key, null, locale);
-    }
 }
-

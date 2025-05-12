@@ -5,6 +5,7 @@ import com.tserashkevich.feedbackservice.utils.ExceptionList;
 
 public class OtherServiceServerException extends RuntimeException {
     public OtherServiceServerException() {
-        super(ExceptionList.SERVER_OTHER_SERVICE.getValue());
+        super(ExceptionList.SERVER_OTHER_SERVICE);
     }
+
 }

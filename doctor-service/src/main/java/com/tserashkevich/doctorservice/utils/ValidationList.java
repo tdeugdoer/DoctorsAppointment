@@ -4,19 +4,20 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ValidationList {
-    public final String NAME_REQUIRED = "{name.required}";
-    public final String WRONG_MAX_NAME_LENGTH = "{wrong.max.name.length}";
-    public final String SURNAME_REQUIRED = "{surname.required}";
-    public final String WRONG_MAX_SURNAME_LENGTH = "{wrong.max.surname.length}";
-    public final String WRONG_MAX_PATRONYMIC_LENGTH = "{wrong.max.patronymic.length}";
-    public final String SPECIALIZATION_REQUIRED = "{specialization.required}";
-    public final String WRONG_SPECIALIZATION = "{wrong.specialization}";
-    public final String GENDER_REQUIRED = "{gender.required}";
-    public final String WRONG_GENDER = "{wrong.gender}";
-    public final String PHONE_REQUIRED = "{phone.required}";
-    public final String WRONG_PHONE_FORMAT = "{wrong.phone.format}";
-    public final String EXPERIENCE_LESS_ZERO = "{experience.less.zero}";
-    public final String EXPERIENCE_MORE_HUNDRED = "{experience.more.hundred}";
-    public final String BIRTHDATE_REQUIRED = "{birthdate.required}";
-    public final String WRONG_BIRTHDATE = "{wrong.birthdate}";
+    public final String NAME_REQUIRED = "Имя обязательно";
+    public final String WRONG_MAX_NAME_LENGTH = "Неверная длина имени";
+    public final String SURNAME_REQUIRED = "Фамилия обязательна";
+    public final String WRONG_MAX_SURNAME_LENGTH = "Неверная длина фамилии";
+    public final String WRONG_MAX_PATRONYMIC_LENGTH = "Неверная длина отчества";
+    public final String SPECIALIZATION_REQUIRED = "Специализация обязательна";
+    public final String WRONG_SPECIALIZATION = "Неверная специализация";
+    public final String GENDER_REQUIRED = "Пол обязательный";
+    public final String WRONG_GENDER = "Неверный пол";
+    public final String PHONE_REQUIRED = "Номер телефона обязательный";
+    public final String WRONG_PHONE_FORMAT = "Неверный формат номера телефона";
+    public final String EXPERIENCE_LESS_ZERO = "Опыт должен быть больше нуля";
+    public final String EXPERIENCE_MORE_HUNDRED = "Опыт должен быть меньше ста";
+    public final String BIRTHDATE_REQUIRED = "Дата рождения обязательна";
+    public final String WRONG_BIRTHDATE = "Неверная дата рождения";
+
 }

@@ -21,7 +21,7 @@ public class MedicalRecord {
     @Id
     private String id;
     private UUID patient;
-    private UUID appointment;
+    private String appointment;
     private UUID doctor;
     private LocalDate dateOfVisit;
     private String diagnosis;
@@ -36,4 +36,5 @@ public class MedicalRecord {
             this.fileKeys = fileKeys;
         } else this.fileKeys.addAll(fileKeys);
     }
+
 }

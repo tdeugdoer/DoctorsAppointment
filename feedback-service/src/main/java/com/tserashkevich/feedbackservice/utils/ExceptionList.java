@@ -1,38 +1,16 @@
 package com.tserashkevich.feedbackservice.utils;
 
-import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import lombok.experimental.UtilityClass;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+@UtilityClass
+public class ExceptionList {
+    public final String FEEDBACK_NOT_FOUND = "Отзыв не найден";
+    public final String FEEDBACK_EXIST = "Отзыв уже существует";
+    public final String APPOINTMENT_NOT_FOUND = "Запись, для которой создаётся отзыв, не существует";
+    public final String APPOINTMENT_NOT_COMPLETED = "Запись, для которой создаётся отзыв, не завершена";
+    public final String BAD_REQUEST_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Bad request)";
+    public final String NOT_FOUND_OTHER_SERVICE = "Объект не найден при запросе к другому сервису (Not found)";
+    public final String SERVER_OTHER_SERVICE = "Невозможно получить ответ от другого сервиса (Server Error)";
 
-@AllArgsConstructor
-public enum ExceptionList {
-    FEEDBACK_NOT_FOUND("feedback.not.found"),
-    FEEDBACK_EXIST("feedback.exist"),
-    APPOINTMENT_NOT_FOUND("appointment.not.found"),
-    APPOINTMENT_NOT_COMPLETED("appointment.not.completed"),
-    BAD_REQUEST_OTHER_SERVICE("bad.request.other.service"),
-    NOT_FOUND_OTHER_SERVICE("not.found.other.service"),
-    SERVER_OTHER_SERVICE("server.other.service");
-
-    private static MessageSource messageSource;
-
-    static {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("exceptionMessages");
-        messageSource.setDefaultLocale(Locale.ENGLISH);
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        ExceptionList.messageSource = messageSource;
-    }
-
-    private final String key;
-
-    public String getValue() {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(key, null, locale);
-    }
 }
 

@@ -34,9 +34,10 @@ public interface FeedbackMapper {
     @Mapping(target = "creationTime", ignore = true)
     void updateModel(@MappingTarget Feedback feedback, UpdateFeedbackRequest updateFeedbackRequest);
 
-    @Mapping(target = "appointment", ignore = true)
-    @Mapping(target = "rating", ignore = true)
-    @Mapping(target = "comment", ignore = true)
-    @Mapping(target = "creationTime", ignore = true)
-    void updateModel(@MappingTarget Feedback feedback, AppointmentResponse appointmentResponse);
+    default void updateModel(@MappingTarget Feedback feedback, AppointmentResponse appointmentResponse) {
+        feedback.setService(appointmentResponse.getService().getFirst().getId());
+        feedback.setDoctor(appointmentResponse.getDoctor().getId());
+        feedback.setPatient(appointmentResponse.getPatient());
+    }
+
 }

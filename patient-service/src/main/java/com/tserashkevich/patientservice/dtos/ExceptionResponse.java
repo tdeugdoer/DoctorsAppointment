@@ -15,4 +15,5 @@ public class ExceptionResponse {
         this.message = message;
         this.timestamp = LocalDateTime.now();
     }
+
 }

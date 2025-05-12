@@ -10,4 +10,5 @@ import java.util.UUID;
 public class ChangeAvgDoctorRatingEvent {
     private final UUID doctor;
     private final Double avgRating;
+
 }

@@ -24,4 +24,5 @@ public interface DoctorService {
     List<DoctorResponse> search(String searchLine);
 
     void changeAvgRating(ChangeAvgDoctorRatingEvent changeAvgDoctorRatingEvent);
+
 }

@@ -20,4 +20,5 @@ public class DoctorResponse {
     private final LocalDate birthDate;
     private final String image;
     private final Double rating;
+
 }

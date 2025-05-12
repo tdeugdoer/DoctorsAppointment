@@ -82,6 +82,13 @@ public class ServiceServiceImpl implements ServiceService {
                 .build();
     }
 
+    @Override
+    public List<ServiceResponse> findAll(List<UUID> serviceIds) {
+        List<Service> serviceResponses = serviceRepository.findAllById(serviceIds);
+        log.info(LogList.FIND_SERVICES, serviceIds);
+        return serviceMapper.toResponses(serviceResponses);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public ServiceResponse findById(UUID serviceId) {
@@ -107,4 +114,5 @@ public class ServiceServiceImpl implements ServiceService {
         Optional<Service> optionalPassenger = serviceRepository.findById(serviceId);
         return optionalPassenger.orElseThrow(ServiceNotFoundException::new);
     }
+
 }

@@ -16,4 +16,5 @@ public class Violation {
         this.message = message;
         this.timestamp = LocalDateTime.now();
     }
+
 }

@@ -42,6 +42,13 @@ resilience4j:
         ignore-exceptions:
           - com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
 mongock:
   migration-scan-package:
     - com.tserashkevich.medicalhistoryservice.migrations

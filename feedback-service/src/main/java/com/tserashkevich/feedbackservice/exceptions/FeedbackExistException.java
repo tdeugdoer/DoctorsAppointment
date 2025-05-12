@@ -4,6 +4,7 @@ import com.tserashkevich.feedbackservice.utils.ExceptionList;
 
 public class FeedbackExistException extends RuntimeException {
     public FeedbackExistException() {
-        super(ExceptionList.FEEDBACK_EXIST.getValue());
+        super(ExceptionList.FEEDBACK_EXIST);
     }
+
 }

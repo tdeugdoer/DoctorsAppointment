@@ -1,6 +1,10 @@
 package com.tserashkevich.medicalhistoryservice.services.impl;
 
-import com.tserashkevich.medicalhistoryservice.dtos.*;
+import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.UpdateMedicalRecordRequest;
 import com.tserashkevich.medicalhistoryservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.medicalhistoryservice.exceptions.AppointmentNotFoundException;
 import com.tserashkevich.medicalhistoryservice.exceptions.MedicalRecordMissingFileKeyException;
@@ -29,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -98,10 +101,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .add(findAllParams.getDateOfVisitEnd(), Criteria.where("dateOfVisit").lte(findAllParams.getDateOfVisitEnd()))
                 .with(pageable)
                 .build();
+
         Page<MedicalRecord> medicalRecordPage = PageableExecutionUtils.getPage(mongoTemplate.find(query, MedicalRecord.class),
                 pageable,
                 () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1),
                         MedicalRecord.class));
+
         log.info(LogList.FIND_ALL_MEDICAL_RECORDS);
         return PageResponse.<MedicalRecordResponse>builder()
                 .objectList(medicalRecordMapper.toResponses(medicalRecordPage.getContent()))
@@ -141,11 +146,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         return optionalMedicalRecord.orElseThrow(MedicalRecordNotFoundException::new);
     }
 
-    private AppointmentResponse getAppointment(UUID appointmentId) {
+    private AppointmentResponse getAppointment(String appointmentId) {
         try {
             return appointmentFeignClient.findAppointment(appointmentId);
         } catch (OtherServiceNotFoundException e) {
             throw new AppointmentNotFoundException();
         }
     }
+
 }

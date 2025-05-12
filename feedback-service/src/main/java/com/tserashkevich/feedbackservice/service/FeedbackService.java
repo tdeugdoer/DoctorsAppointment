@@ -1,6 +1,10 @@
 package com.tserashkevich.feedbackservice.service;
 
-import com.tserashkevich.feedbackservice.dtos.*;
+import com.tserashkevich.feedbackservice.dtos.FeedbackRequest;
+import com.tserashkevich.feedbackservice.dtos.FeedbackResponse;
+import com.tserashkevich.feedbackservice.dtos.FindAllParams;
+import com.tserashkevich.feedbackservice.dtos.PageResponse;
+import com.tserashkevich.feedbackservice.dtos.UpdateFeedbackRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,4 +23,5 @@ public interface FeedbackService {
     Double findDoctorAvgFeedback(UUID doctorId);
 
     List<FeedbackResponse> findDoctorFeedbacks(UUID doctorId);
+
 }

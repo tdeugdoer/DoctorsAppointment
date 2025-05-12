@@ -20,4 +20,5 @@ public class LogList {
     public final String DELETE_IMAGE = "Image deleted with key: {}";
     public final String GET_IMAGE = "Image got with key: {}";
     public final String SEARCH_PATIENT = "Search patient with searchline: {}";
+
 }

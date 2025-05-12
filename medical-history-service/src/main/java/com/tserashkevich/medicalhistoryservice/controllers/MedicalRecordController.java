@@ -1,6 +1,10 @@
 package com.tserashkevich.medicalhistoryservice.controllers;
 
-import com.tserashkevich.medicalhistoryservice.dtos.*;
+import com.tserashkevich.medicalhistoryservice.dtos.FindAllParams;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordRequest;
+import com.tserashkevich.medicalhistoryservice.dtos.MedicalRecordResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.PageResponse;
+import com.tserashkevich.medicalhistoryservice.dtos.UpdateMedicalRecordRequest;
 import com.tserashkevich.medicalhistoryservice.services.MedicalRecordService;
 import com.tserashkevich.medicalhistoryservice.utils.SortList;
 import jakarta.validation.Valid;
@@ -10,7 +14,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -85,4 +99,5 @@ public class MedicalRecordController {
                            @PathVariable String fileKey) {
         medicalRecordService.deleteFile(medicalRecordId, fileKey);
     }
+
 }

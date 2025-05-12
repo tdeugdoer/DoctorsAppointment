@@ -8,12 +8,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.UUID;
-
 @Retry(name = "retry-conf")
 @CircuitBreaker(name = "circuitbreaker-conf")
 @FeignClient(name = "appointment", configuration = FeignConfig.class)
 public interface AppointmentFeignClient {
     @GetMapping("/{appointmentId}")
-    AppointmentResponse findAppointment(@PathVariable UUID appointmentId);
+    AppointmentResponse findAppointment(@PathVariable String appointmentId);
+
 }

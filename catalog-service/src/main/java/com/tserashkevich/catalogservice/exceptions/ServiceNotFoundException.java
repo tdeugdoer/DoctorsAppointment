@@ -5,6 +5,7 @@ import com.tserashkevich.catalogservice.utils.ExceptionList;
 
 public class ServiceNotFoundException extends RuntimeException {
     public ServiceNotFoundException() {
-        super(ExceptionList.SERVICE_NOT_FOUND.getValue());
+        super(ExceptionList.SERVICE_NOT_FOUND);
     }
+
 }

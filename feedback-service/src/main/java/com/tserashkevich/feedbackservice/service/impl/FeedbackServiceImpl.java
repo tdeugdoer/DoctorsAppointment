@@ -1,7 +1,11 @@
 package com.tserashkevich.feedbackservice.service.impl;
 
 import com.querydsl.core.types.Predicate;
-import com.tserashkevich.feedbackservice.dtos.*;
+import com.tserashkevich.feedbackservice.dtos.FeedbackRequest;
+import com.tserashkevich.feedbackservice.dtos.FeedbackResponse;
+import com.tserashkevich.feedbackservice.dtos.FindAllParams;
+import com.tserashkevich.feedbackservice.dtos.PageResponse;
+import com.tserashkevich.feedbackservice.dtos.UpdateFeedbackRequest;
 import com.tserashkevich.feedbackservice.dtos.feign.AppointmentResponse;
 import com.tserashkevich.feedbackservice.dtos.kafka.ChangeAvgDoctorRatingEvent;
 import com.tserashkevich.feedbackservice.exceptions.AppointmentNotCompletedException;
@@ -156,11 +160,12 @@ public class FeedbackServiceImpl implements FeedbackService {
         );
     }
 
-    private AppointmentResponse getAppointment(UUID appointmentId) {
+    private AppointmentResponse getAppointment(String appointmentId) {
         try {
             return appointmentFeignClient.findAppointment(appointmentId);
         } catch (OtherServiceNotFoundException e) {
             throw new AppointmentNotFoundException();
         }
     }
+
 }

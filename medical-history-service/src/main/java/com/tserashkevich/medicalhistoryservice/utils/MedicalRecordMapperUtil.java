@@ -19,4 +19,5 @@ public class MedicalRecordMapperUtil {
                 .link(fileService.get(fileKey))
                 .build();
     }
+
 }

@@ -14,8 +14,9 @@ import java.util.UUID;
 public interface FeedbackRepository extends JpaRepository<Feedback, UUID>, QuerydslPredicateExecutor<Feedback> {
     List<Feedback> findAllByDoctor(UUID doctorId);
 
-    Boolean existsByAppointment(UUID appointmentId);
+    Boolean existsByAppointment(String appointmentId);
 
     @Query("SELECT AVG(r.rating) FROM Feedback r WHERE r.doctor = :doctorId")
     Double findAverageRatingByDoctor(@Param("doctorId") UUID doctorId);
+
 }

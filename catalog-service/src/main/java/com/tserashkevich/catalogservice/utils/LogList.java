@@ -12,7 +12,9 @@ public class LogList {
     public final String EDIT_SERVICE = "Service edited with ID: {}";
     public final String DELETE_SERVICE = "Service deleted with ID: {}";
     public final String FIND_ALL_SERVICES = "Found all services";
+    public final String FIND_SERVICES = "Found services by IDs: {}";
     public final String FIND_SERVICE = "Found services with ID: {}";
     public final String SEARCH_SERVICE = "Search service with searchline: {}";
     public final String EXIST_SERVICE = "Check exist service with ID: {}";
+
 }

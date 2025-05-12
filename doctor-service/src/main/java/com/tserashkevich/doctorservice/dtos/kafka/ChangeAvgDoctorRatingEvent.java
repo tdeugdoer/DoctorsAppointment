@@ -1,6 +1,10 @@
 package com.tserashkevich.doctorservice.dtos.kafka;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -12,4 +16,5 @@ import java.util.UUID;
 public class ChangeAvgDoctorRatingEvent {
     private UUID doctor;
     private Double avgRating;
+
 }
