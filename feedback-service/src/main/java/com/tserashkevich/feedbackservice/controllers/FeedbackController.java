@@ -9,11 +9,11 @@ import com.tserashkevich.feedbackservice.dtos.UpdateFeedbackRequest;
 import com.tserashkevich.feedbackservice.service.FeedbackService;
 import com.tserashkevich.feedbackservice.utils.FeedbackSortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +32,7 @@ import java.util.UUID;
 @RestController
 @Validated
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/feedbacks")
 public class FeedbackController implements FeedbackApi {
     private final FeedbackService feedbackService;
@@ -55,7 +56,7 @@ public class FeedbackController implements FeedbackApi {
 
     @GetMapping
     public PageResponse<FeedbackResponse> findAllFeedbacks(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                           @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                           @RequestParam(defaultValue = "500") int limit,
                                                            @RequestParam(defaultValue = "ID_ASC") FeedbackSortList sort,
                                                            @RequestParam(required = false) String appointmentId,
                                                            @RequestParam(required = false) UUID serviceId,

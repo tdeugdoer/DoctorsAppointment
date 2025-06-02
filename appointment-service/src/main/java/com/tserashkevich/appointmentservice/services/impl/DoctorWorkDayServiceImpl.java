@@ -48,6 +48,7 @@ public class DoctorWorkDayServiceImpl implements DoctorWorkDayService {
 
         doctorWorkDayRepository.save(doctorWorkDay);
         appointmentGenerateService.generateAppointments(doctorWorkDay);
+        appointmentGenerateService.generateTodayAppointments();
 
         log.info(LogList.CREATE_DOCTOR_WORK_DAY, doctorWorkDay.getId());
         return doctorWorkDayMapper.toResponse(doctorWorkDay);

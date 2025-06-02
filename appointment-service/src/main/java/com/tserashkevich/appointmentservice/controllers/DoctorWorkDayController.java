@@ -7,7 +7,6 @@ import com.tserashkevich.appointmentservice.dtos.doctorWorkDay.DoctorWorkDayResp
 import com.tserashkevich.appointmentservice.services.DoctorWorkDayService;
 import com.tserashkevich.appointmentservice.utils.DoctorWorkDaySortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,7 +49,7 @@ public class DoctorWorkDayController {
 
     @GetMapping
     public PageResponse<DoctorWorkDayResponse> findAllDoctorWorkDays(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                                     @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                                     @RequestParam(defaultValue = "500") int limit,
                                                                      @RequestParam(defaultValue = "ID_ASC") DoctorWorkDaySortList sort,
                                                                      @RequestParam(required = false) UUID doctor,
                                                                      @RequestParam(required = false) List<UUID> services,

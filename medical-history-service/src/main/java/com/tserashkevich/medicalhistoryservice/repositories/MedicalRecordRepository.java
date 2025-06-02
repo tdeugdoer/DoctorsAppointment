@@ -6,9 +6,14 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface MedicalRecordRepository extends MongoRepository<MedicalRecord, String> {
+    List<MedicalRecord> findByDoctor(UUID doctorId);
+
+    List<MedicalRecord> findByPatient(UUID patientId);
+
     @Query("{ $or: [ " +
             "{ 'diagnosis': { $regex: ?0, $options: 'i' } }," +
             "{ 'treatments': { $regex: ?0, $options: 'i' } }," +
@@ -16,5 +21,7 @@ public interface MedicalRecordRepository extends MongoRepository<MedicalRecord, 
             "{ 'recommendations': { $regex: ?0, $options: 'i' } }" +
             "] }")
     List<MedicalRecord> findBySearchLine(String searchLine);
+
+    MedicalRecord findByAppointment(String appointmentId);
 
 }

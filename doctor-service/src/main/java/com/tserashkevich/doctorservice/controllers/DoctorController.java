@@ -9,7 +9,6 @@ import com.tserashkevich.doctorservice.models.enums.Specialization;
 import com.tserashkevich.doctorservice.services.DoctorService;
 import com.tserashkevich.doctorservice.utils.SortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -62,7 +61,7 @@ public class DoctorController {
 
     @GetMapping
     public PageResponse<DoctorResponse> findAllDoctors(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                       @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                       @RequestParam(defaultValue = "500") int limit,
                                                        @RequestParam(defaultValue = "ID_ASC") SortList sort,
                                                        @RequestParam(required = false) Specialization specialization,
                                                        @RequestParam(required = false) Gender gender,

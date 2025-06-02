@@ -8,7 +8,6 @@ import com.tserashkevich.patientservice.models.enums.Gender;
 import com.tserashkevich.patientservice.services.PatientService;
 import com.tserashkevich.patientservice.utils.SortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,7 +60,7 @@ public class PatientController {
 
     @GetMapping
     public PageResponse<PatientResponse> findAllPatients(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                         @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                         @RequestParam(defaultValue = "500") int limit,
                                                          @RequestParam(defaultValue = "ID_ASC") SortList sort,
                                                          @RequestParam(required = false) Gender gender,
                                                          @RequestParam(required = false) LocalDate birthDateStart,

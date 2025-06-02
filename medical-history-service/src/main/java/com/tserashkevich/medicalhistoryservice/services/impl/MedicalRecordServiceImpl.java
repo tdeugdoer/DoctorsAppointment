@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -139,6 +140,24 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             medicalRecordRepository.save(medicalRecord);
             fileService.delete(fileKey);
         } else throw new MedicalRecordMissingFileKeyException();
+    }
+
+    @Override
+    public List<MedicalRecordResponse> findByDoctorId(UUID doctorId) {
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findByDoctor(doctorId);
+        return medicalRecordMapper.toResponses(medicalRecords);
+    }
+
+    @Override
+    public List<MedicalRecordResponse> findByPatientId(UUID patientId) {
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findByPatient(patientId);
+        return medicalRecordMapper.toResponses(medicalRecords);
+    }
+
+    @Override
+    public MedicalRecordResponse findByAppointmentId(String appointmentId) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findByAppointment(appointmentId);
+        return medicalRecordMapper.toResponse(medicalRecord);
     }
 
     public MedicalRecord getOrThrow(String medicalRecordId) {

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,30 +43,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final MongoTemplate mongoTemplate;
     private final ExternalServiceClient externalServiceClient;
     private final AppointmentGenerateService appointmentGenerateService;
-
-    @Override
-    public AppointmentResponse create(List<Appointment> appointments) {
-//        Appointment appointment = appointmentMapper.toModel(appointmentRequest);
-//
-//        ServiceResponse serviceResponse = checkService(appointment.getService());
-//        DoctorResponse doctorResponse = checkDoctor(appointment.getDoctor());
-//        checkMatchingSpecialization(serviceResponse.getSpecialization(), doctorResponse.getSpecialization());
-//
-//        appointment.setStatus(Status.FREE);
-//        appointment.setPrice(countPrice(serviceResponse.getPrice(), doctorResponse.getExperience()));
-//        appointmentRepository.save(appointment);
-//
-//        log.info(LogList.CREATE_APPOINTMENT, appointment.getId());
-//        return appointmentMapper.toResponse(appointment);
-        return AppointmentResponse.builder().build();
-    }
-
-    @Override
-    public void delete(String appointmentId) {
-        Appointment appointment = getOrThrow(appointmentId);
-        appointmentRepository.delete(appointment);
-        log.info(LogList.DELETE_APPOINTMENT, appointmentId);
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -124,6 +101,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.save(appointment);
 
         appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
+        appointmentGenerateService.generateTodayAppointments();
 
         log.info(LogList.FREE_APPOINTMENT, appointment);
         return appointmentMapper.toResponse(appointment);
@@ -144,6 +122,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.save(appointment);
 
         appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
+        appointmentGenerateService.generateTodayAppointments();
 
         log.info(LogList.BOOK_APPOINTMENT, appointment, patientId);
         return appointmentMapper.toResponse(appointment);
@@ -184,8 +163,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(Status.COMPLETED);
         appointmentRepository.save(appointment);
 
-        appointmentGenerateService.regenerateAppointments(appointment.getDoctorWorkDayId());
-
         log.info(LogList.COMPLETE_APPOINTMENT, appointmentId);
         return appointmentMapper.toResponse(appointment);
     }
@@ -205,7 +182,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentResponse> findFreeWithDoctorId(UUID doctorId) {
-        List<Appointment> appointments = appointmentRepository.findByStatusAndDoctor_Id(Status.FREE, doctorId, AppointmentSortList.DATE_ASC.getValue());
+        List<Appointment> appointments = appointmentRepository.findByStatusAndDoctor_IdAndDateGreaterThanEqual(Status.FREE, doctorId, LocalDateTime.now(), AppointmentSortList.DATE_ASC.getValue());
+        return appointmentMapper.toResponses(appointments);
+    }
+
+    @Override
+    public List<AppointmentResponse> findByPatientId(UUID patientId) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByPatient(patientId);
+        return appointmentMapper.toResponses(appointments);
+    }
+
+    @Override
+    public List<AppointmentResponse> findByDoctorId(UUID doctorId) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDoctor_Id(doctorId);
         return appointmentMapper.toResponses(appointments);
     }
 

@@ -8,7 +8,6 @@ import com.tserashkevich.catalogservice.models.enums.Specialization;
 import com.tserashkevich.catalogservice.services.ServiceService;
 import com.tserashkevich.catalogservice.utils.SortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,7 +57,7 @@ public class ServiceController {
 
     @GetMapping
     public PageResponse<ServiceResponse> findAllServices(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                         @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                         @RequestParam(defaultValue = "500") int limit,
                                                          @RequestParam(defaultValue = "ID_ASC") SortList sort,
                                                          @RequestParam(required = false) Specialization specialization,
                                                          @RequestParam(required = false) BigDecimal priceStart,

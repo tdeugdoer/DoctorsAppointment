@@ -14,11 +14,17 @@ import java.util.UUID;
 
 @Repository
 public interface AppointmentRepository extends MongoRepository<Appointment, String> {
-    List<Appointment> findByStatusAndDoctor_Id(Status status, UUID doctorId, Sort sort);
+    List<Appointment> findByStatusAndDoctor_IdAndDateGreaterThanEqual(Status status, UUID doctorId, LocalDateTime date, Sort sort);
 
     void deleteAllByDoctorWorkDayId(String doctorWorkDayId);
 
     List<Appointment> findByDoctorWorkDayIdAndDateGreaterThanEqual(String doctorWorkDayId, LocalDateTime date);
+
+    List<Appointment> findAppointmentsByDoctorWorkDayId(String doctorWorkDayId);
+
+    List<Appointment> findAppointmentsByPatient(UUID patientId);
+
+    List<Appointment> findAppointmentsByDoctor_Id(UUID doctorId);
 
     @Query("{ $or: [ " +
             "{ 'doctor': { $regex: ?0, $options: 'i' } }," +

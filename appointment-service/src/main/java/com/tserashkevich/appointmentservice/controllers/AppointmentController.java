@@ -8,7 +8,6 @@ import com.tserashkevich.appointmentservice.services.AppointmentService;
 import com.tserashkevich.appointmentservice.utils.AppointmentSortList;
 import com.tserashkevich.appointmentservice.utils.PatternList;
 import com.tserashkevich.appointmentservice.utils.ValidationList;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -38,7 +37,7 @@ public class AppointmentController {
 
     @GetMapping
     public PageResponse<AppointmentResponse> findAllAppointments(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                                 @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                                 @RequestParam(defaultValue = "500") int limit,
                                                                  @RequestParam(defaultValue = "ID_ASC") AppointmentSortList sort,
                                                                  @RequestParam(required = false) Status status,
                                                                  @RequestParam(required = false) LocalDateTime dateStart,
@@ -61,6 +60,16 @@ public class AppointmentController {
     @GetMapping("/free/{doctorId}")
     public List<AppointmentResponse> findDoctorFreeAppointments(@PathVariable UUID doctorId) {
         return appointmentService.findFreeWithDoctorId(doctorId);
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public List<AppointmentResponse> findPatientAppointments(@PathVariable UUID patientId) {
+        return appointmentService.findByPatientId(patientId);
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public List<AppointmentResponse> findDoctorAppointments(@PathVariable UUID doctorId) {
+        return appointmentService.findByDoctorId(doctorId);
     }
 
     @GetMapping("/{appointmentId}")

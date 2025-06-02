@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +56,7 @@ public interface FeedbackApi {
     @ApiResponse(responseCode = "400", description = "Wrong request parameter value",
             content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     PageResponse<FeedbackResponse> findAllFeedbacks(@Parameter(description = "Page number") @RequestParam(defaultValue = "0") @Min(0) int page,
-                                                    @Parameter(description = "Items limit") @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                    @Parameter(description = "Items limit") @RequestParam(defaultValue = "500") int limit,
                                                     @Parameter(description = "Sort value") @RequestParam(defaultValue = "ID_ASC") FeedbackSortList sort,
                                                     @Parameter(description = "Filter appointmentId") @RequestParam(required = false) String appointmentId,
                                                     @Parameter(description = "Filter serviceId") @RequestParam(required = false) UUID serviceId,
