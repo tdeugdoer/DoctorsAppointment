@@ -9,4 +9,6 @@ public interface AppointmentGenerateService {
 
     void deleteAppointments(String doctorWorkDayId);
 
+    void generateTodayAppointments();
+
 }

@@ -8,6 +8,7 @@ import com.tserashkevich.medicalhistoryservice.dtos.UpdateMedicalRecordRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface MedicalRecordService {
     MedicalRecordResponse create(MedicalRecordRequest medicalRecordRequest, List<MultipartFile> files);
@@ -23,5 +24,11 @@ public interface MedicalRecordService {
     List<MedicalRecordResponse> search(String searchLine);
 
     void deleteFile(String medicalRecordId, String fileKey);
+
+    List<MedicalRecordResponse> findByDoctorId(UUID doctorId);
+
+    List<MedicalRecordResponse> findByPatientId(UUID patientId);
+
+    MedicalRecordResponse findByAppointmentId(String appointmentId);
 
 }

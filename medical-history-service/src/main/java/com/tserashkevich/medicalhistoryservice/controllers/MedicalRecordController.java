@@ -8,7 +8,6 @@ import com.tserashkevich.medicalhistoryservice.dtos.UpdateMedicalRecordRequest;
 import com.tserashkevich.medicalhistoryservice.services.MedicalRecordService;
 import com.tserashkevich.medicalhistoryservice.utils.SortList;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,7 +60,7 @@ public class MedicalRecordController {
 
     @GetMapping
     public PageResponse<MedicalRecordResponse> findAllMedicalRecords(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                                     @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit,
+                                                                     @RequestParam(defaultValue = "500") int limit,
                                                                      @RequestParam(defaultValue = "ID_ASC") SortList sort,
                                                                      @RequestParam(required = false) UUID patient,
                                                                      @RequestParam(required = false) UUID appointment,
@@ -88,9 +87,24 @@ public class MedicalRecordController {
         return medicalRecordService.findById(id);
     }
 
+    @GetMapping("/doctor/{doctorId}")
+    public List<MedicalRecordResponse> findMedicalRecordsByDoctorId(@PathVariable UUID doctorId) {
+        return medicalRecordService.findByDoctorId(doctorId);
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public List<MedicalRecordResponse> findMedicalRecordsByPatientId(@PathVariable UUID patientId) {
+        return medicalRecordService.findByPatientId(patientId);
+    }
+
     @GetMapping("/search/{searchLine}")
     public List<MedicalRecordResponse> searchMedicalRecords(@PathVariable String searchLine) {
         return medicalRecordService.search(searchLine);
+    }
+
+    @GetMapping("/appointment/{appointmentId}")
+    public MedicalRecordResponse findMedicalRecordsByAppointmentId(@PathVariable String appointmentId) {
+        return medicalRecordService.findByAppointmentId(appointmentId);
     }
 
     @DeleteMapping("/{medicalRecordId}/delete-file/{fileKey}")

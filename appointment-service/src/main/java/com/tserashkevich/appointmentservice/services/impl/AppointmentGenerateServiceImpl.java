@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,9 +30,7 @@ public class AppointmentGenerateServiceImpl implements AppointmentGenerateServic
     private final DoctorWorkDayRepository doctorWorkDayRepository;
 
     private static LocalTime getStartTime(LocalDateTime dateTime) {
-        return dateTime.isAfter(LocalDateTime.now())
-                ? dateTime.toLocalTime()
-                : LocalTime.now();
+        return dateTime.toLocalTime();
     }
 
     @Override
@@ -88,6 +87,40 @@ public class AppointmentGenerateServiceImpl implements AppointmentGenerateServic
         log.info(LogList.DELETE_APPOINTMENTS, doctorWorkDayId);
     }
 
+    @Override
+    public void generateTodayAppointments() {
+        List<DoctorWorkDay> doctorWorkDays = doctorWorkDayRepository.findByDate(LocalDate.now());
+
+        for (DoctorWorkDay doctorWorkDay : doctorWorkDays) {
+            List<Appointment> sortAppointmentsByDate = sortAppointmentsByDate(appointmentRepository.findAppointmentsByDoctorWorkDayId(doctorWorkDay.getId()));
+            List<Appointment> freeSortAppointments = sortAppointmentsByDate.stream()
+                    .filter(appointment -> appointment.getStatus().equals(Status.FREE))
+                    .toList();
+            List<Appointment> notFreeSortAppointments = sortAppointmentsByDate.stream()
+                    .filter(appointment -> !appointment.getStatus().equals(Status.FREE))
+                    .toList();
+            List<ServiceResponse> sortedServices = sortServicesByDurationDesc(doctorWorkDay.getServices());
+
+            LocalTime currentTime = doctorWorkDay.getWorkTime().getStart();
+            LocalTime endTime = doctorWorkDay.getWorkTime().getEnd();
+            List<Appointment> newAppointments = new ArrayList<>();
+            for (Appointment notFreeAppointment : notFreeSortAppointments) {
+                while (!findFittingServices(currentTime, notFreeAppointment.getDate().toLocalTime(), sortedServices).isEmpty()) {
+                    List<ServiceResponse> fittingServices = findFittingServices(currentTime, notFreeAppointment.getDate().toLocalTime(), sortedServices);
+                    newAppointments.add(buildAppointment(doctorWorkDay, fittingServices, currentTime));
+                    currentTime = currentTime.plusMinutes(5);
+                }
+                currentTime = notFreeAppointment.getDate().toLocalTime().plusMinutes(notFreeAppointment.getService().getFirst().getDuration());
+            }
+            while (currentTime.isBefore(endTime)) {
+                newAppointments.add(buildAppointment(doctorWorkDay, sortedServices, currentTime));
+                currentTime = currentTime.plusMinutes(5);
+            }
+            appointmentRepository.deleteAll(freeSortAppointments);
+            appointmentRepository.saveAll(newAppointments);
+        }
+    }
+
     private List<Appointment> createAppointments(LocalTime startTime, LocalTime endTime, DoctorWorkDay doctorWorkDay, List<ServiceResponse> sortedServices) {
         LocalTime currentTime = startTime;
         List<Appointment> appointments = new ArrayList<>();
@@ -108,7 +141,7 @@ public class AppointmentGenerateServiceImpl implements AppointmentGenerateServic
     }
 
     private boolean canFitNextAppointment(int duration, LocalTime currentTime, LocalTime endTime) {
-        return currentTime.plusMinutes(duration).isBefore(endTime);
+        return currentTime.plusMinutes(duration).isBefore(endTime.plusMinutes(1));
     }
 
     private List<ServiceResponse> findFittingServices(LocalTime currentTime, LocalTime endTime, List<ServiceResponse> services) {
